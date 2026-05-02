@@ -550,6 +550,23 @@ const App = {
         heading.appendChild(nb);
       }
     }
+    this.saveFalconCommit();
+  },
+
+  saveFalconCommit() {
+    const sel = this.getFalconSelections();
+    const out = { generatedDate: new Date().toISOString().slice(0, 10), data: {} };
+    Object.entries(this.falconData.data).forEach(([domain, products]) => {
+      out.data[domain] = products.map(p => ({
+        product: p.product,
+        selected: sel[p.product] === true,
+      }));
+    });
+    fetch('/api/save-falcon-commit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(out, null, 2),
+    }).catch(() => {}); // silently ignore if server lacks the endpoint
   },
 
   resetAllControls() {
