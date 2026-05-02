@@ -742,11 +742,18 @@ main { flex: 1; }
 
 .modal-mit-item {
   display: flex;
-  gap: 12px;
-  align-items: flex-start;
+  flex-direction: column;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* top row: ID + description */
+.mit-top {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
   padding: 12px 14px;
 }
 
@@ -761,13 +768,93 @@ main { flex: 1; }
   padding: 2px 7px;
   white-space: nowrap;
   flex-shrink: 0;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
 .modal-mit-text {
   font-size: 0.82rem;
   color: var(--text-secondary);
   line-height: 1.55;
+}
+
+/* assessment controls section */
+.mit-assessment {
+  border-top: 1px solid var(--border);
+  background: var(--bg-surface);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mit-assessment-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.mit-field-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* Implementation dropdown */
+.mit-impl-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: fit-content;
+  min-width: 180px;
+  padding: 6px 28px 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2364748b'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  transition: border-color var(--transition), background-color var(--transition);
+}
+.mit-impl-select:hover { border-color: var(--text-muted); }
+
+.mit-impl-select.impl-effective       { background-color: rgba(34,197,94,0.1);   border-color: #22c55e; color: #22c55e; }
+.mit-impl-select.impl-not-effective   { background-color: rgba(239,68,68,0.1);   border-color: #ef4444; color: #ef4444; }
+.mit-impl-select.impl-alternate       { background-color: rgba(59,130,246,0.1);  border-color: #3b82f6; color: #3b82f6; }
+.mit-impl-select.impl-not-implemented { background-color: rgba(249,115,22,0.1);  border-color: #f97316; color: #f97316; }
+.mit-impl-select.impl-not-assessed    { background-color: var(--bg-card);        border-color: var(--border); color: var(--text-muted); }
+.mit-impl-select.impl-not-applicable  { background-color: rgba(100,116,139,0.1); border-color: #64748b; color: #94a3b8; }
+
+/* Justification textarea */
+.mit-justification {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.mit-justification::placeholder { color: var(--text-muted); }
+.mit-justification:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.mit-char-counter {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-align: right;
+  font-family: var(--font-mono);
 }
 
 .modal-ext-link {

@@ -9,6 +9,17 @@ const RISK_META = {
   'Not Assessed': { dot: '⚪', cls: 'risk-none'     },
 };
 
+const IMPL_OPTIONS = ['Effective', 'Not Effective', 'Alternate Control', 'Not Implemented', 'Not Assessed', 'Not Applicable'];
+const IMPL_META = {
+  'Effective':         { cls: 'impl-effective'       },
+  'Not Effective':     { cls: 'impl-not-effective'   },
+  'Alternate Control': { cls: 'impl-alternate'       },
+  'Not Implemented':   { cls: 'impl-not-implemented' },
+  'Not Assessed':      { cls: 'impl-not-assessed'    },
+  'Not Applicable':    { cls: 'impl-not-applicable'  },
+};
+const MIT_CONTROLS_KEY = 'mythos_mit_controls';
+
 const App = {
   data: null,
   mitMap: {},
@@ -39,6 +50,74 @@ const App = {
     Object.values(levels).forEach(l => { if (counts[l] !== undefined) { counts[l]++; assigned++; } });
     counts['Not Assessed'] = this.data.codes.length - assigned;
     return counts;
+  },
+
+  // ── Mitigation control persistence ───────────────────────────────────────
+
+  getMitControls() {
+    try { return JSON.parse(localStorage.getItem(MIT_CONTROLS_KEY) || '{}'); }
+    catch { return {}; }
+  },
+
+  getMitControl(mitId) {
+    return this.getMitControls()[mitId] || { implementation: 'Not Assessed', justification: '' };
+  },
+
+  saveMitImpl(mitId, value, selectEl) {
+    const controls = this.getMitControls();
+    if (!controls[mitId]) controls[mitId] = { implementation: 'Not Assessed', justification: '' };
+    controls[mitId].implementation = value;
+    localStorage.setItem(MIT_CONTROLS_KEY, JSON.stringify(controls));
+    const allCls = Object.values(IMPL_META).map(m => m.cls);
+    selectEl.classList.remove(...allCls);
+    selectEl.classList.add(IMPL_META[value].cls);
+  },
+
+  saveMitJustification(mitId, value, textarea) {
+    const controls = this.getMitControls();
+    if (!controls[mitId]) controls[mitId] = { implementation: 'Not Assessed', justification: '' };
+    controls[mitId].justification = value;
+    localStorage.setItem(MIT_CONTROLS_KEY, JSON.stringify(controls));
+    const counter = textarea.parentElement.querySelector('.char-current');
+    if (counter) counter.textContent = value.length;
+  },
+
+  renderModalMitItem(mitId) {
+    const desc    = this.mitMap[mitId] || 'Description unavailable';
+    const control = this.getMitControl(mitId);
+    const implCls = IMPL_META[control.implementation]?.cls || 'impl-not-assessed';
+    const jLen    = control.justification.length;
+
+    const options = IMPL_OPTIONS.map(o =>
+      `<option value="${o}" ${o === control.implementation ? 'selected' : ''}>${o}</option>`
+    ).join('');
+
+    const safeJustification = control.justification
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+    return `
+      <div class="modal-mit-item">
+        <div class="mit-top">
+          <span class="modal-mit-id">${mitId}</span>
+          <span class="modal-mit-text">${desc}</span>
+        </div>
+        <div class="mit-assessment">
+          <div class="mit-assessment-field">
+            <label class="mit-field-label">Control Implementation</label>
+            <select class="mit-impl-select ${implCls}"
+              onchange="App.saveMitImpl('${mitId}', this.value, this)">
+              ${options}
+            </select>
+          </div>
+          <div class="mit-assessment-field">
+            <label class="mit-field-label">Control Justification</label>
+            <textarea class="mit-justification" maxlength="1500"
+              placeholder="Describe implementation details, evidence, or rationale…"
+              oninput="App.saveMitJustification('${mitId}', this.value, this)">${safeJustification}</textarea>
+            <div class="mit-char-counter"><span class="char-current">${jLen}</span> / 1500</div>
+          </div>
+        </div>
+      </div>`;
   },
 
   // ── Init ──────────────────────────────────────────────────────────────────
@@ -419,14 +498,7 @@ const App = {
     const c = this.data.codes.find(x => x.code === code);
     if (!c) return;
 
-    const mits = c.mitigations.map(id => {
-      const desc = this.mitMap[id] || 'Description unavailable';
-      return `
-        <div class="modal-mit-item">
-          <span class="modal-mit-id">${id}</span>
-          <span class="modal-mit-text">${desc}</span>
-        </div>`;
-    }).join('');
+    const mits = c.mitigations.map(id => this.renderModalMitItem(id)).join('');
 
     const rankBadge  = c.rank           ? `<span class="modal-tag">Rank #${c.rank}</span>`                        : '';
     const catTag     = c.category       ? `<span class="modal-tag">${c.category}</span>`                          : '';
