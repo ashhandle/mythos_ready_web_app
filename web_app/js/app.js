@@ -17,7 +17,8 @@ const IMPL_META = {
   'Not Assessed':      { cls: 'impl-not-assessed'    },
   'Not Applicable':    { cls: 'impl-not-applicable'  },
 };
-const MIT_CONTROLS_KEY = 'mythos_mit_controls';
+const MIT_CONTROLS_KEY     = 'mythos_mit_controls';
+const FALCON_SELECTION_KEY = 'frontierai_falcon_selection';
 
 const App = {
   data: null,
@@ -376,16 +377,67 @@ const App = {
       </div>`;
   },
 
+  // ── Falcon selection persistence ──────────────────────────────────────────
+
+  getFalconSelections() {
+    try { return JSON.parse(localStorage.getItem(FALCON_SELECTION_KEY) || '{}'); }
+    catch { return {}; }
+  },
+
+  setFalconSelection(product, value) {
+    const sel = this.getFalconSelections();
+    sel[product] = value;
+    localStorage.setItem(FALCON_SELECTION_KEY, JSON.stringify(sel));
+    // Refresh the selected count on the card
+    const card = document.querySelector(`.falcon-card[data-domain="${CSS.escape(product.split('||')[0])}"]`);
+    if (card) this.refreshFalconCardCount(card.dataset.domain);
+  },
+
+  refreshFalconCardCount(domain) {
+    const el = document.querySelector(`.falcon-card[data-domain="${CSS.escape(domain)}"] .falcon-selected-count`);
+    if (!el) return;
+    const products = this.falconData.data[domain] || [];
+    const sel = this.getFalconSelections();
+    const n = products.filter(p => sel[p.product] === true).length;
+    el.textContent = n > 0 ? `${n} selected` : '';
+    el.style.display = n > 0 ? '' : 'none';
+  },
+
+  downloadFalconSelection() {
+    const sel = this.getFalconSelections();
+    const out = JSON.parse(JSON.stringify(this.falconData));
+    // Swap schema fields for export format
+    delete out['$schema']; delete out['$id'];
+    Object.keys(out.data).forEach(domain => {
+      out.data[domain] = out.data[domain].map(p => ({
+        product: p.product,
+        selected: sel[p.product] === true,
+      }));
+    });
+    const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'falcon_selection.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  },
+
   // ── Falcon modules section ────────────────────────────────────────────────
 
   renderFalconSection() {
     if (!this.falconData) return '';
     const domains = Object.entries(this.falconData.data);
     const totalProducts = domains.reduce((n, [, prods]) => n + prods.length, 0);
+    const sel = this.getFalconSelections();
+    const totalSelected = Object.values(sel).filter(Boolean).length;
+    const downloadBtn = totalSelected > 0
+      ? `<button class="falcon-download-btn" onclick="App.downloadFalconSelection()">&#x2B07; Download Selection (${totalSelected})</button>`
+      : '';
     return `
       <div class="section-heading" style="margin-top:40px">
         <h2>Falcon Platform Modules</h2>
         <span class="count">${domains.length} domains &nbsp;&middot;&nbsp; ${totalProducts} products</span>
+        ${downloadBtn}
       </div>
       <div class="falcon-grid">
         ${domains.map(([domain, products]) => this.renderFalconCard(domain, products)).join('')}
@@ -407,16 +459,19 @@ const App = {
       'COUNTER ADVERSARY OPERATIONS':  '&#x1F3AF;',
       'FALCON COMPLETE':               '&#x1F985;',
     };
-    const icon = icons[domain] || '&#x1F4E6;';
+    const icon  = icons[domain] || '&#x1F4E6;';
     const count = products.length;
+    const sel   = this.getFalconSelections();
+    const selectedCount = products.filter(p => sel[p.product] === true).length;
+
     const productList = count > 0
       ? products.slice(0, 4).map(p =>
-          `<span class="falcon-product-tag">${p.product}</span>`
+          `<span class="falcon-product-tag${sel[p.product] ? ' falcon-product-tag--selected' : ''}">${p.product}</span>`
         ).join('') + (count > 4 ? `<span class="falcon-product-more">+${count - 4} more</span>` : '')
       : '<span class="falcon-product-tag falcon-product-tag--empty">Coming soon</span>';
 
     return `
-      <div class="falcon-card">
+      <div class="falcon-card" data-domain="${domain}" onclick="App.openFalconDomain('${domain.replace(/'/g, "\\'")}')">
         <div class="fw-card-header">
           <div class="fw-icon falcon-icon">${icon}</div>
           <span class="fw-version falcon-domain-badge">FALCON</span>
@@ -427,8 +482,74 @@ const App = {
         </div>
         <div class="fw-card-footer">
           <div class="fw-code-count"><strong>${count}</strong> ${count === 1 ? 'product' : 'products'}</div>
+          <span class="falcon-selected-count" style="${selectedCount === 0 ? 'display:none' : ''}">${selectedCount > 0 ? selectedCount + ' selected' : ''}</span>
         </div>
       </div>`;
+  },
+
+  openFalconDomain(domain) {
+    const products = this.falconData.data[domain] || [];
+    const sel = this.getFalconSelections();
+    const icons = {
+      'ENDPOINT SECURITY':'&#x1F6E1;','NEXT-GEN IDENTITY':'&#x1F510;',
+      'BROWSER SECURITY':'&#x1F310;','CLOUD SECURITY':'&#x2601;',
+      'NEXT-GEN SIEM':'&#x1F4CA;','DATA SECURITY':'&#x1F512;',
+      'EXPOSURE MANAGEMENT':'&#x1F50D;','IT AUTOMATION':'&#x2699;',
+      'AIDR':'&#x1F916;','CHARLOTTE AI':'&#x2728;',
+      'COUNTER ADVERSARY OPERATIONS':'&#x1F3AF;','FALCON COMPLETE':'&#x1F985;',
+    };
+
+    const rows = products.length > 0
+      ? products.map(p => {
+          const checked = sel[p.product] === true ? 'checked' : '';
+          return `
+            <label class="falcon-product-row${sel[p.product] ? ' falcon-product-row--selected' : ''}" id="fp-row-${this.escHtml(p.product)}">
+              <input type="checkbox" class="falcon-checkbox" ${checked}
+                onchange="App.toggleFalconProduct('${domain.replace(/'/g,"\\'")}', '${p.product.replace(/'/g,"\\'")}', this)">
+              <span class="falcon-product-row-name">${p.product}</span>
+              <span class="falcon-product-row-check">&#x2713;</span>
+            </label>`;
+        }).join('')
+      : '<p class="falcon-empty">No products listed for this domain yet.</p>';
+
+    document.getElementById('modal-body').innerHTML = `
+      <div class="modal-body">
+        <div class="modal-code-header">
+          <div class="fw-icon falcon-icon" style="width:44px;height:44px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">${icons[domain] || '&#x1F4E6;'}</div>
+          <div>
+            <div class="modal-title falcon-modal-title">${domain}</div>
+            <div class="modal-fw-name">CrowdStrike Falcon Platform &nbsp;&middot;&nbsp; ${products.length} ${products.length === 1 ? 'product' : 'products'}</div>
+          </div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-label">Select products in use</div>
+          <div class="falcon-product-list">${rows}</div>
+        </div>
+      </div>`;
+
+    document.getElementById('modal-overlay').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  },
+
+  toggleFalconProduct(domain, product, checkbox) {
+    this.setFalconSelection(product, checkbox.checked);
+    const label = document.getElementById(`fp-row-${this.escHtml(product)}`);
+    if (label) label.classList.toggle('falcon-product-row--selected', checkbox.checked);
+    // Refresh download button count
+    const sel = this.getFalconSelections();
+    const total = Object.values(sel).filter(Boolean).length;
+    const btn = document.querySelector('.falcon-download-btn');
+    if (btn) btn.textContent = `⬇ Download Selection (${total})`;
+    else if (total > 0) {
+      const heading = document.querySelector('.section-heading');
+      if (heading) {
+        const nb = document.createElement('button');
+        nb.className = 'falcon-download-btn';
+        nb.onclick = () => App.downloadFalconSelection();
+        nb.textContent = `⬇ Download Selection (${total})`;
+        heading.appendChild(nb);
+      }
+    }
   },
 
   resetAllControls() {
