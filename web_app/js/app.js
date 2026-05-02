@@ -1,9 +1,47 @@
 'use strict';
 
+const RISK_LEVELS = ['Critical', 'High', 'Medium', 'Not Assessed'];
+const RISK_STORAGE_KEY = 'mythos_risk_levels';
+const RISK_META = {
+  'Critical':     { dot: '🔴', cls: 'risk-critical' },
+  'High':         { dot: '🟠', cls: 'risk-high'     },
+  'Medium':       { dot: '🟡', cls: 'risk-medium'   },
+  'Not Assessed': { dot: '⚪', cls: 'risk-none'     },
+};
+
 const App = {
   data: null,
   mitMap: {},
   fwCodeCounts: {},
+
+  // ── Risk persistence (localStorage) ──────────────────────────────────────
+
+  getRiskLevels() {
+    try { return JSON.parse(localStorage.getItem(RISK_STORAGE_KEY) || '{}'); }
+    catch { return {}; }
+  },
+
+  setRiskLevel(code, level) {
+    const levels = this.getRiskLevels();
+    if (level === 'Not Assessed') { delete levels[code]; }
+    else { levels[code] = level; }
+    localStorage.setItem(RISK_STORAGE_KEY, JSON.stringify(levels));
+  },
+
+  getCodeRiskLevel(code) {
+    return this.getRiskLevels()[code] || 'Not Assessed';
+  },
+
+  getRiskCounts() {
+    const levels = this.getRiskLevels();
+    const counts = { 'Critical': 0, 'High': 0, 'Medium': 0, 'Not Assessed': 0 };
+    let assigned = 0;
+    Object.values(levels).forEach(l => { if (counts[l] !== undefined) { counts[l]++; assigned++; } });
+    counts['Not Assessed'] = this.data.codes.length - assigned;
+    return counts;
+  },
+
+  // ── Init ──────────────────────────────────────────────────────────────────
 
   async init() {
     try {
@@ -16,8 +54,10 @@ const App = {
     } catch (e) {
       document.getElementById('app-root').innerHTML = `
         <div class="loading-state">
-          <p style="color:#f97316">&#9888; Failed to load framework data. Make sure you are running via a local web server.</p>
-          <p style="color:var(--text-muted);font-size:0.85rem;margin-top:8px">Run: <code style="color:var(--accent)">python3 -m http.server 8080</code> inside the <code>web_app/</code> folder</p>
+          <p style="color:#f97316">&#9888; Failed to load data. Ensure you are running via a local web server.</p>
+          <p style="color:var(--text-muted);font-size:0.85rem;margin-top:8px">
+            Run: <code style="color:var(--accent)">python3 -m http.server 8080</code> inside the <code>web_app/</code> folder
+          </p>
         </div>`;
     }
   },
@@ -29,17 +69,19 @@ const App = {
     });
   },
 
+  // ── Router ────────────────────────────────────────────────────────────────
+
   route() {
     const hash = window.location.hash || '#/';
     const root = document.getElementById('app-root');
-
     this.updateNavActive(hash);
 
     if (hash === '#/' || hash === '') {
       root.innerHTML = this.viewHome();
     } else if (hash.startsWith('#/framework/')) {
-      const fwId = decodeURIComponent(hash.replace('#/framework/', ''));
-      root.innerHTML = this.viewFramework(fwId);
+      root.innerHTML = this.viewFramework(decodeURIComponent(hash.replace('#/framework/', '')));
+    } else if (hash.startsWith('#/risk/')) {
+      root.innerHTML = this.viewRiskLevel(decodeURIComponent(hash.replace('#/risk/', '')));
     } else if (hash === '#/codes') {
       root.innerHTML = this.viewAllCodes();
     } else if (hash === '#/mitigations') {
@@ -59,7 +101,7 @@ const App = {
     });
   },
 
-  // ── Home ─────────────────────────────────────────────────────────────────
+  // ── Home ──────────────────────────────────────────────────────────────────
 
   viewHome() {
     const d = this.data;
@@ -77,14 +119,21 @@ const App = {
         </div>
       </div>
       <div class="page-section">
-        <div class="section-heading">
-          <h2>Security Frameworks</h2>
-          <span class="count">${d.frameworks.length}</span>
+        <div class="home-body">
+          <div class="home-main">
+            <div class="section-heading">
+              <h2>Security Frameworks</h2>
+              <span class="count">${d.frameworks.length}</span>
+            </div>
+            <div class="framework-grid">
+              ${d.frameworks.map(fw => this.renderFwCard(fw)).join('')}
+            </div>
+          </div>
+          <aside class="home-sidebar">
+            ${this.renderRiskWidget()}
+          </aside>
         </div>
-        <div class="framework-grid">
-          ${d.frameworks.map(fw => this.renderFwCard(fw)).join('')}
-        </div>
-        <div class="section-heading">
+        <div class="section-heading" style="margin-top:40px">
           <h2>Recent Codes</h2>
           <span class="count">${d.codes.length} total &mdash; <a href="#/codes">view all</a></span>
         </div>
@@ -93,6 +142,142 @@ const App = {
         </div>
       </div>`;
   },
+
+  // ── Risk widget ───────────────────────────────────────────────────────────
+
+  renderRiskWidget() {
+    const counts = this.getRiskCounts();
+    const total = this.data.codes.length;
+    const assessed = total - counts['Not Assessed'];
+    const pct = Math.round((assessed / total) * 100);
+
+    const items = RISK_LEVELS.map(level => {
+      const meta = RISK_META[level];
+      const count = counts[level];
+      return `
+        <a class="risk-level-item risk-item-${meta.cls}" href="#/risk/${encodeURIComponent(level)}">
+          <span class="risk-dot ${meta.cls}"></span>
+          <span class="risk-level-name">${level}</span>
+          <span class="risk-level-count">${count} <span class="risk-level-word">${count === 1 ? 'code' : 'codes'}</span></span>
+          <span class="risk-item-arrow">&#x2192;</span>
+        </a>`;
+    }).join('');
+
+    const resetBtn = assessed > 0
+      ? `<button class="risk-reset-btn" onclick="App.resetAllRiskLevels()">Reset all assessments</button>`
+      : '';
+
+    return `
+      <div class="risk-widget">
+        <div class="risk-widget-header">
+          <div class="risk-widget-title"><span class="risk-widget-icon">&#x26A0;</span> Risk Assessment</div>
+          <span class="risk-widget-sub">Assign a risk level to each code</span>
+        </div>
+        <div class="risk-progress-wrap">
+          <div class="risk-progress-bar">
+            <div class="risk-progress-fill" style="width:${pct}%"></div>
+          </div>
+          <span class="risk-progress-label">${assessed} / ${total} assessed</span>
+        </div>
+        <div class="risk-levels-list">${items}</div>
+        ${resetBtn}
+      </div>`;
+  },
+
+  resetAllRiskLevels() {
+    if (confirm('Reset all risk level assignments? This cannot be undone.')) {
+      localStorage.removeItem(RISK_STORAGE_KEY);
+      this.route();
+    }
+  },
+
+  // ── Risk level detail page ────────────────────────────────────────────────
+
+  viewRiskLevel(level) {
+    if (!RISK_LEVELS.includes(level)) return '<div class="loading-state"><p>Unknown risk level.</p></div>';
+    const meta = RISK_META[level];
+    const riskLevels = this.getRiskLevels();
+
+    const codes = level === 'Not Assessed'
+      ? this.data.codes.filter(c => !riskLevels[c.code])
+      : this.data.codes.filter(c => riskLevels[c.code] === level);
+
+    const navChips = RISK_LEVELS.map(l => {
+      const m = RISK_META[l];
+      const isActive = l === level;
+      return `<a class="risk-nav-chip ${isActive ? 'active risk-item-' + m.cls : ''}" href="#/risk/${encodeURIComponent(l)}">${m.dot} ${l}</a>`;
+    }).join('');
+
+    const emptyMsg = level === 'Not Assessed'
+      ? { h: 'All codes have been assessed', p: 'Every code has a risk level assigned.' }
+      : { h: `No ${level} codes yet`, p: `Open any code and assign it <strong>${level}</strong> risk from the detail view.` };
+
+    return `
+      <div class="risk-detail-header risk-header-${meta.cls}">
+        <div class="fw-detail-inner">
+          <a class="back-link" href="#/">&#x2190; Home</a>
+          <div class="risk-detail-title-row">
+            <span class="risk-dot ${meta.cls} risk-dot-lg"></span>
+            <h1>${level} Risk</h1>
+          </div>
+          <p>${codes.length} ${codes.length === 1 ? 'code' : 'codes'} ${level === 'Not Assessed' ? 'pending assessment' : 'at this risk level'}</p>
+          <div class="fw-meta-row" style="margin-top:16px">${navChips}</div>
+        </div>
+      </div>
+      <div class="page-section">
+        <div class="codes-list" id="risk-codes-list">
+          ${codes.length
+            ? codes.map(c => this.renderCodeRowWithSelector(c)).join('')
+            : `<div class="empty-state"><h3>${emptyMsg.h}</h3><p>${emptyMsg.p}</p></div>`
+          }
+        </div>
+      </div>`;
+  },
+
+  renderCodeRowWithSelector(c) {
+    const current = this.getCodeRiskLevel(c.code);
+    const desc = c.description.length > 110 ? c.description.slice(0, 110) + '…' : c.description;
+    const options = RISK_LEVELS.map(l =>
+      `<option value="${l}" ${l === current ? 'selected' : ''}>${RISK_META[l].dot} ${l}</option>`
+    ).join('');
+    return `
+      <div class="code-row" data-fw="${c.framework_id}" data-code="${c.code}" onclick="App.openCode('${c.code}')">
+        <span class="code-badge fw-${c.framework_id}">${c.code}</span>
+        <div class="code-row-body">
+          <div class="code-row-name">${c.name}</div>
+          <div class="code-row-desc">${desc}</div>
+        </div>
+        <div class="code-row-meta" onclick="event.stopPropagation()">
+          <select class="risk-inline-select risk-select-${RISK_META[current].cls}"
+            onchange="App.setRiskLevelFromRow('${c.code}', this.value, this)">
+            ${options}
+          </select>
+          <span class="mit-count">${c.mitigations.length} mitigations</span>
+        </div>
+      </div>`;
+  },
+
+  setRiskLevelFromRow(code, level, selectEl) {
+    this.setRiskLevel(code, level);
+    selectEl.className = `risk-inline-select risk-select-${RISK_META[level].cls}`;
+
+    // If the new level no longer matches this page, fade-remove the row
+    const pageLevel = decodeURIComponent(window.location.hash.replace('#/risk/', ''));
+    if (level !== pageLevel) {
+      const row = selectEl.closest('.code-row');
+      if (row) {
+        row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(16px)';
+        setTimeout(() => {
+          row.remove();
+          if (!document.querySelector('#risk-codes-list .code-row')) this.route();
+        }, 300);
+      }
+    }
+  },
+
+  // ── Framework card ────────────────────────────────────────────────────────
 
   renderFwCard(fw) {
     const icons = {
@@ -128,7 +313,6 @@ const App = {
     const fw = this.data.frameworks.find(f => f.framework_id === fwId);
     if (!fw) return '<div class="loading-state"><p>Framework not found.</p></div>';
     const codes = this.data.codes.filter(c => c.framework_id === fwId);
-
     return `
       <div class="fw-detail-header" data-fw="${fwId}">
         <div class="fw-detail-inner">
@@ -158,9 +342,8 @@ const App = {
   viewAllCodes() {
     const fwChips = this.data.frameworks.map(fw => `
       <button class="filter-chip" data-fw="${fw.framework_id}" onclick="App.toggleFwFilter(this, '${fw.framework_id}')">
-        ${fw.code_prefix.split('x')[0].replace(/x+/g,'').trim() || fw.framework_id.split('_')[0]}
+        ${fw.code_prefix.split('x')[0].replace(/x+/g, '').trim() || fw.framework_id.split('_')[0]}
       </button>`).join('');
-
     return `
       <div class="page-section">
         <div class="section-heading">
@@ -185,7 +368,6 @@ const App = {
         <span class="mit-id">${m.mitigation_id}</span>
         <span class="mit-text">${m.description}</span>
       </div>`).join('');
-
     return `
       <div class="page-section">
         <div class="section-heading">
@@ -202,8 +384,7 @@ const App = {
   filterMitigations(query) {
     const q = query.toLowerCase();
     document.querySelectorAll('#mit-grid .mit-card').forEach(card => {
-      const text = card.textContent.toLowerCase();
-      card.style.display = !q || text.includes(q) ? '' : 'none';
+      card.style.display = !q || card.textContent.toLowerCase().includes(q) ? '' : 'none';
     });
   },
 
@@ -212,6 +393,10 @@ const App = {
   renderCodeRow(c) {
     const desc = c.description.length > 120 ? c.description.slice(0, 120) + '…' : c.description;
     const rank = c.rank ? `<span class="mit-count">#${c.rank}</span>` : '';
+    const level = this.getCodeRiskLevel(c.code);
+    const riskBadge = level !== 'Not Assessed'
+      ? `<span class="risk-level-badge ${RISK_META[level].cls}">${level}</span>`
+      : '';
     return `
       <div class="code-row" data-fw="${c.framework_id}" data-code="${c.code}" onclick="App.openCode('${c.code}')">
         <span class="code-badge fw-${c.framework_id}">${c.code}</span>
@@ -220,6 +405,7 @@ const App = {
           <div class="code-row-desc">${desc}</div>
         </div>
         <div class="code-row-meta">
+          ${riskBadge}
           <span class="risk-tag">${c.risk_context}</span>
           <span class="mit-count">${c.mitigations.length} mitigations</span>
           ${rank}
@@ -242,11 +428,19 @@ const App = {
         </div>`;
     }).join('');
 
-    const rankBadge = c.rank ? `<span class="modal-tag">Rank #${c.rank}</span>` : '';
-    const categoryTag = c.category ? `<span class="modal-tag">${c.category}</span>` : '';
-    const tacticTag = c.tactic ? `<span class="modal-tag">Tactic: ${c.tactic}</span>` : '';
-    const subTag = c.is_subtechnique ? `<span class="modal-tag">Sub-technique of ${c.technique_parent}</span>` : '';
-    const nistFn = c.function ? `<span class="modal-tag">Function: ${c.function}</span>` : '';
+    const rankBadge  = c.rank           ? `<span class="modal-tag">Rank #${c.rank}</span>`                        : '';
+    const catTag     = c.category       ? `<span class="modal-tag">${c.category}</span>`                          : '';
+    const tacticTag  = c.tactic         ? `<span class="modal-tag">Tactic: ${c.tactic}</span>`                    : '';
+    const subTag     = c.is_subtechnique? `<span class="modal-tag">Sub-technique of ${c.technique_parent}</span>` : '';
+    const nistFn     = c.function       ? `<span class="modal-tag">Function: ${c.function}</span>`                : '';
+
+    const currentLevel = this.getCodeRiskLevel(c.code);
+    const riskButtons = RISK_LEVELS.map(l => `
+      <button class="modal-risk-btn ${RISK_META[l].cls} ${l === currentLevel ? 'active' : ''}"
+        id="modal-risk-btn-${l.replace(/\s/g, '-')}"
+        onclick="App.setRiskLevelFromModal('${c.code}', '${l}')">
+        <span class="risk-dot ${RISK_META[l].cls}"></span>${l}
+      </button>`).join('');
 
     document.getElementById('modal-body').innerHTML = `
       <div class="modal-body">
@@ -259,6 +453,11 @@ const App = {
         </div>
 
         <div class="modal-section">
+          <div class="modal-section-label">Risk Level</div>
+          <div class="modal-risk-selector">${riskButtons}</div>
+        </div>
+
+        <div class="modal-section">
           <div class="modal-section-label">Description</div>
           <p class="modal-description">${c.description}</p>
         </div>
@@ -267,7 +466,7 @@ const App = {
           <div class="modal-section-label">Classification</div>
           <div class="modal-tags">
             <span class="modal-tag">${c.risk_context}</span>
-            ${rankBadge}${categoryTag}${tacticTag}${subTag}${nistFn}
+            ${rankBadge}${catTag}${tacticTag}${subTag}${nistFn}
           </div>
         </div>
 
@@ -282,9 +481,38 @@ const App = {
         </div>
       </div>`;
 
-    const overlay = document.getElementById('modal-overlay');
-    overlay.classList.remove('hidden');
+    document.getElementById('modal-overlay').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+  },
+
+  setRiskLevelFromModal(code, level) {
+    this.setRiskLevel(code, level);
+
+    // Update button active states in modal
+    RISK_LEVELS.forEach(l => {
+      const btn = document.getElementById(`modal-risk-btn-${l.replace(/\s/g, '-')}`);
+      if (btn) btn.classList.toggle('active', l === level);
+    });
+
+    // Update risk badge on any visible code row behind the modal
+    const meta = document.querySelector(`.code-row[data-code="${code}"] .code-row-meta`);
+    if (meta) {
+      const existing = meta.querySelector('.risk-level-badge');
+      if (existing) existing.remove();
+      if (level !== 'Not Assessed') {
+        const badge = document.createElement('span');
+        badge.className = `risk-level-badge ${RISK_META[level].cls}`;
+        badge.textContent = level;
+        meta.insertBefore(badge, meta.firstChild);
+      }
+    }
+
+    // Also update the inline select on risk detail pages
+    const sel = document.querySelector(`.code-row[data-code="${code}"] .risk-inline-select`);
+    if (sel) {
+      sel.value = level;
+      sel.className = `risk-inline-select risk-select-${RISK_META[level].cls}`;
+    }
   },
 
   closeModal() {
@@ -314,9 +542,7 @@ const App = {
       c.description.toLowerCase().includes(ql) ||
       c.risk_context.toLowerCase().includes(ql)
     );
-
-    const root = document.getElementById('app-root');
-    root.innerHTML = `
+    document.getElementById('app-root').innerHTML = `
       <div class="page-section">
         <div class="search-results-header">
           <h2>&#128269; Results for &ldquo;${this.escHtml(q)}&rdquo; &mdash; ${matches.length} found</h2>
@@ -325,30 +551,26 @@ const App = {
         <div class="codes-list">
           ${matches.length
             ? matches.map(c => this.renderCodeRow(c)).join('')
-            : '<div class="empty-state"><h3>No codes match your search</h3><p>Try a different keyword or browse frameworks above.</p></div>'
+            : '<div class="empty-state"><h3>No codes match your search</h3><p>Try a different keyword or browse frameworks.</p></div>'
           }
         </div>
       </div>`;
-
     this.bindPageEvents();
   },
 
   // ── Filter helpers ────────────────────────────────────────────────────────
 
-  toggleFwFilter(btn, fwId) {
+  toggleFwFilter(btn) {
     btn.classList.toggle('active');
     this.applyCodeListFilter();
   },
 
   applyCodeListFilter() {
-    const activeChips = [...document.querySelectorAll('.filter-chip.active')].map(b => b.dataset.fw);
-    const query = (document.getElementById('codes-filter')?.value || '').toLowerCase();
-
+    const active = [...document.querySelectorAll('.filter-chip.active')].map(b => b.dataset.fw);
+    const query  = (document.getElementById('codes-filter')?.value || '').toLowerCase();
     document.querySelectorAll('#all-codes-list .code-row').forEach(row => {
-      const fw = row.dataset.fw;
-      const text = row.textContent.toLowerCase();
-      const fwOk = activeChips.length === 0 || activeChips.includes(fw);
-      const qOk = !query || text.includes(query);
+      const fwOk = active.length === 0 || active.includes(row.dataset.fw);
+      const qOk  = !query || row.textContent.toLowerCase().includes(query);
       row.style.display = fwOk && qOk ? '' : 'none';
     });
   },
@@ -367,27 +589,17 @@ const App = {
     }
 
     const codesFilter = document.getElementById('codes-filter');
-    if (codesFilter) {
-      codesFilter.addEventListener('input', () => this.applyCodeListFilter());
-    }
+    if (codesFilter) codesFilter.addEventListener('input', () => this.applyCodeListFilter());
 
-    const overlay = document.getElementById('modal-overlay');
+    const overlay  = document.getElementById('modal-overlay');
     const closeBtn = document.getElementById('modal-close');
     if (closeBtn) closeBtn.onclick = () => this.closeModal();
-    if (overlay) {
-      overlay.addEventListener('click', e => {
-        if (e.target === overlay) this.closeModal();
-      });
-    }
+    if (overlay)  overlay.addEventListener('click', e => { if (e.target === overlay) this.closeModal(); });
 
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') this.closeModal();
-    }, { once: true });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') this.closeModal(); }, { once: true });
   },
 
-  navigate(hash) {
-    window.location.hash = hash;
-  },
+  navigate(hash) { window.location.hash = hash; },
 
   escHtml(str) {
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
