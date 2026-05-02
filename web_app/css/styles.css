@@ -1,16 +1,16 @@
-/* ── Design tokens ── */
+/* ── Design tokens — CrowdStrike theme ── */
 :root {
-  --bg-base:       #080d1a;
-  --bg-surface:    #0d1526;
-  --bg-card:       #111c33;
-  --bg-card-hover: #162240;
-  --bg-input:      #0a1220;
-  --border:        #1c2d4f;
-  --border-light:  #243554;
+  --bg-base:       #08080D;
+  --bg-surface:    #0F0F16;
+  --bg-card:       #15151E;
+  --bg-card-hover: #1C1C28;
+  --bg-input:      #0C0C12;
+  --border:        #242434;
+  --border-light:  #2E2E42;
 
-  --text-primary:  #dde6f5;
-  --text-secondary:#8098c0;
-  --text-muted:    #415070;
+  --text-primary:  #FFFFFF;
+  --text-secondary:#8A8FA8;
+  --text-muted:    #484D66;
 
   --owasp-llm:     #f97316;
   --owasp-llm-bg:  rgba(249,115,22,0.08);
@@ -21,11 +21,12 @@
   --nist:          #22c55e;
   --nist-bg:       rgba(34,197,94,0.08);
 
-  --accent:        #4f8ef7;
-  --accent-glow:   rgba(79,142,247,0.15);
+  --accent:        #E81123;
+  --accent-hover:  #FF1F30;
+  --accent-glow:   rgba(232,17,35,0.15);
 
-  --risk-critical: #ef4444;
-  --risk-critical-bg: rgba(239,68,68,0.08);
+  --risk-critical: #E81123;
+  --risk-critical-bg: rgba(232,17,35,0.10);
   --risk-high:     #f97316;
   --risk-high-bg:  rgba(249,115,22,0.08);
   --risk-medium:   #eab308;
@@ -33,14 +34,14 @@
   --risk-none:     #64748b;
   --risk-none-bg:  rgba(100,116,139,0.08);
 
-  --radius:        8px;
-  --radius-lg:     14px;
-  --radius-xl:     20px;
-  --shadow-card:   0 4px 32px rgba(0,0,0,0.5);
-  --shadow-modal:  0 8px 60px rgba(0,0,0,0.8);
+  --radius:        6px;
+  --radius-lg:     10px;
+  --radius-xl:     16px;
+  --shadow-card:   0 4px 32px rgba(0,0,0,0.7);
+  --shadow-modal:  0 8px 60px rgba(0,0,0,0.9);
 
   --font-mono:     'Menlo', 'Consolas', 'Monaco', monospace;
-  --transition:    0.18s ease;
+  --transition:    0.15s ease;
 }
 
 /* ── Reset & base ── */
@@ -66,7 +67,7 @@ a:hover { text-decoration: underline; }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(8,13,26,0.92);
+  background: rgba(8,8,13,0.95);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
@@ -116,6 +117,9 @@ a:hover { text-decoration: underline; }
   background: var(--bg-card);
   text-decoration: none;
 }
+.nav-link.active {
+  color: var(--accent);
+}
 
 .nav-search { flex: 1; max-width: 320px; margin-left: auto; }
 
@@ -123,7 +127,7 @@ a:hover { text-decoration: underline; }
   width: 100%;
   background: var(--bg-input);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 4px;
   color: var(--text-primary);
   padding: 8px 16px;
   font-size: 0.875rem;
@@ -168,7 +172,7 @@ main { flex: 1; }
 
 /* ── Hero ── */
 .hero {
-  background: linear-gradient(160deg, var(--bg-surface) 0%, var(--bg-base) 100%);
+  background: var(--bg-surface);
   border-bottom: 1px solid var(--border);
   padding: 64px 24px 48px;
   text-align: center;
@@ -179,8 +183,8 @@ main { flex: 1; }
   content: '';
   position: absolute;
   top: -60px; left: 50%; transform: translateX(-50%);
-  width: 600px; height: 300px;
-  background: radial-gradient(ellipse, rgba(79,142,247,0.08) 0%, transparent 70%);
+  width: 700px; height: 350px;
+  background: radial-gradient(ellipse, rgba(232,17,35,0.06) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -191,12 +195,12 @@ main { flex: 1; }
   align-items: center;
   gap: 6px;
   background: var(--accent-glow);
-  border: 1px solid rgba(79,142,247,0.3);
-  border-radius: 20px;
+  border: 1px solid rgba(232,17,35,0.35);
+  border-radius: 4px;
   padding: 4px 14px;
   font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   color: var(--accent);
   text-transform: uppercase;
   margin-bottom: 20px;
@@ -261,7 +265,7 @@ main { flex: 1; }
   color: var(--text-muted);
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 2px 8px;
   font-family: var(--font-mono);
 }
@@ -270,7 +274,7 @@ main { flex: 1; }
 .framework-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  gap: 16px;
   margin-bottom: 48px;
 }
 
@@ -295,21 +299,21 @@ main { flex: 1; }
   height: 3px;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
-.fw-card[data-fw="OWASP_LLM_2025"]::before  { background: var(--owasp-llm); }
+.fw-card[data-fw="OWASP_LLM_2025"]::before    { background: var(--owasp-llm); }
 .fw-card[data-fw="OWASP_AGENTIC_2026"]::before { background: var(--owasp-ag); }
-.fw-card[data-fw="MITRE_ATLAS"]::before     { background: var(--mitre); }
-.fw-card[data-fw="NIST_CSF_2"]::before      { background: var(--nist); }
+.fw-card[data-fw="MITRE_ATLAS"]::before        { background: var(--mitre); }
+.fw-card[data-fw="NIST_CSF_2"]::before         { background: var(--nist); }
 
 .fw-card:hover {
   background: var(--bg-card-hover);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-card);
   text-decoration: none;
 }
-.fw-card[data-fw="OWASP_LLM_2025"]:hover  { border-color: var(--owasp-llm); }
+.fw-card[data-fw="OWASP_LLM_2025"]:hover    { border-color: var(--owasp-llm); }
 .fw-card[data-fw="OWASP_AGENTIC_2026"]:hover { border-color: var(--owasp-ag); }
-.fw-card[data-fw="MITRE_ATLAS"]:hover      { border-color: var(--mitre); }
-.fw-card[data-fw="NIST_CSF_2"]:hover       { border-color: var(--nist); }
+.fw-card[data-fw="MITRE_ATLAS"]:hover        { border-color: var(--mitre); }
+.fw-card[data-fw="NIST_CSF_2"]:hover         { border-color: var(--nist); }
 
 .fw-card-header {
   display: flex;
@@ -320,15 +324,15 @@ main { flex: 1; }
 
 .fw-icon {
   width: 44px; height: 44px;
-  border-radius: 10px;
+  border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
   font-size: 1.4rem;
   flex-shrink: 0;
 }
-.fw-card[data-fw="OWASP_LLM_2025"] .fw-icon  { background: var(--owasp-llm-bg); }
+.fw-card[data-fw="OWASP_LLM_2025"] .fw-icon    { background: var(--owasp-llm-bg); }
 .fw-card[data-fw="OWASP_AGENTIC_2026"] .fw-icon { background: var(--owasp-ag-bg); }
-.fw-card[data-fw="MITRE_ATLAS"] .fw-icon     { background: var(--mitre-bg); }
-.fw-card[data-fw="NIST_CSF_2"] .fw-icon      { background: var(--nist-bg); }
+.fw-card[data-fw="MITRE_ATLAS"] .fw-icon        { background: var(--mitre-bg); }
+.fw-card[data-fw="NIST_CSF_2"] .fw-icon         { background: var(--nist-bg); }
 
 .fw-version {
   font-size: 0.72rem;
@@ -337,7 +341,7 @@ main { flex: 1; }
   color: var(--text-muted);
   background: var(--bg-surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 3px;
   padding: 2px 6px;
   white-space: nowrap;
 }
@@ -388,13 +392,13 @@ main { flex: 1; }
   font-family: var(--font-mono);
   font-weight: 600;
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: 3px;
   border: 1px solid;
 }
-.fw-card[data-fw="OWASP_LLM_2025"] .fw-prefix-tag  { color: var(--owasp-llm); border-color: var(--owasp-llm); background: var(--owasp-llm-bg); }
+.fw-card[data-fw="OWASP_LLM_2025"] .fw-prefix-tag    { color: var(--owasp-llm); border-color: var(--owasp-llm); background: var(--owasp-llm-bg); }
 .fw-card[data-fw="OWASP_AGENTIC_2026"] .fw-prefix-tag { color: var(--owasp-ag); border-color: var(--owasp-ag); background: var(--owasp-ag-bg); }
-.fw-card[data-fw="MITRE_ATLAS"] .fw-prefix-tag     { color: var(--mitre); border-color: var(--mitre); background: var(--mitre-bg); }
-.fw-card[data-fw="NIST_CSF_2"] .fw-prefix-tag      { color: var(--nist); border-color: var(--nist); background: var(--nist-bg); }
+.fw-card[data-fw="MITRE_ATLAS"] .fw-prefix-tag        { color: var(--mitre); border-color: var(--mitre); background: var(--mitre-bg); }
+.fw-card[data-fw="NIST_CSF_2"] .fw-prefix-tag         { color: var(--nist); border-color: var(--nist); background: var(--nist-bg); }
 
 /* ── Code list ── */
 .filter-bar {
@@ -421,7 +425,7 @@ main { flex: 1; }
 
 .filter-chip {
   padding: 6px 14px;
-  border-radius: 20px;
+  border-radius: 4px;
   font-size: 0.78rem;
   font-weight: 600;
   border: 1px solid var(--border);
@@ -433,22 +437,22 @@ main { flex: 1; }
 }
 .filter-chip:hover { border-color: var(--accent); color: var(--accent); }
 .filter-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-.filter-chip[data-fw="OWASP_LLM_2025"].active  { background: var(--owasp-llm); border-color: var(--owasp-llm); }
+.filter-chip[data-fw="OWASP_LLM_2025"].active    { background: var(--owasp-llm); border-color: var(--owasp-llm); }
 .filter-chip[data-fw="OWASP_AGENTIC_2026"].active { background: var(--owasp-ag); border-color: var(--owasp-ag); }
-.filter-chip[data-fw="MITRE_ATLAS"].active      { background: var(--mitre); border-color: var(--mitre); }
-.filter-chip[data-fw="NIST_CSF_2"].active       { background: var(--nist); border-color: var(--nist); }
+.filter-chip[data-fw="MITRE_ATLAS"].active        { background: var(--mitre); border-color: var(--mitre); }
+.filter-chip[data-fw="NIST_CSF_2"].active         { background: var(--nist); border-color: var(--nist); }
 
 .codes-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .code-row {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 18px 20px;
+  padding: 16px 20px;
   cursor: pointer;
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -458,28 +462,28 @@ main { flex: 1; }
 }
 .code-row:hover {
   background: var(--bg-card-hover);
-  transform: translateX(3px);
+  transform: translateX(2px);
 }
-.code-row[data-fw="OWASP_LLM_2025"]:hover  { border-color: var(--owasp-llm); }
+.code-row[data-fw="OWASP_LLM_2025"]:hover    { border-color: var(--owasp-llm); }
 .code-row[data-fw="OWASP_AGENTIC_2026"]:hover { border-color: var(--owasp-ag); }
-.code-row[data-fw="MITRE_ATLAS"]:hover      { border-color: var(--mitre); }
-.code-row[data-fw="NIST_CSF_2"]:hover       { border-color: var(--nist); }
+.code-row[data-fw="MITRE_ATLAS"]:hover        { border-color: var(--mitre); }
+.code-row[data-fw="NIST_CSF_2"]:hover         { border-color: var(--nist); }
 
 .code-badge {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   font-weight: 700;
   padding: 4px 10px;
-  border-radius: 5px;
+  border-radius: 3px;
   border: 1px solid;
   white-space: nowrap;
   min-width: 90px;
   text-align: center;
 }
-.code-badge.fw-OWASP_LLM_2025  { color: var(--owasp-llm); border-color: var(--owasp-llm); background: var(--owasp-llm-bg); }
+.code-badge.fw-OWASP_LLM_2025    { color: var(--owasp-llm); border-color: var(--owasp-llm); background: var(--owasp-llm-bg); }
 .code-badge.fw-OWASP_AGENTIC_2026 { color: var(--owasp-ag); border-color: var(--owasp-ag); background: var(--owasp-ag-bg); }
-.code-badge.fw-MITRE_ATLAS      { color: var(--mitre); border-color: var(--mitre); background: var(--mitre-bg); }
-.code-badge.fw-NIST_CSF_2       { color: var(--nist); border-color: var(--nist); background: var(--nist-bg); }
+.code-badge.fw-MITRE_ATLAS        { color: var(--mitre); border-color: var(--mitre); background: var(--mitre-bg); }
+.code-badge.fw-NIST_CSF_2         { color: var(--nist); border-color: var(--nist); background: var(--nist-bg); }
 
 .code-row-body { min-width: 0; }
 
@@ -510,7 +514,7 @@ main { flex: 1; }
   font-size: 0.68rem;
   font-weight: 600;
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: 3px;
   background: var(--bg-surface);
   border: 1px solid var(--border);
   color: var(--text-muted);
@@ -535,7 +539,7 @@ main { flex: 1; }
   content: '';
   position: absolute;
   top: 0; left: 0;
-  width: 100%; height: 4px;
+  width: 100%; height: 3px;
 }
 .fw-detail-header[data-fw="OWASP_LLM_2025"]::after    { background: var(--owasp-llm); }
 .fw-detail-header[data-fw="OWASP_AGENTIC_2026"]::after { background: var(--owasp-ag); }
@@ -582,7 +586,7 @@ main { flex: 1; }
   gap: 6px;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 4px;
   padding: 4px 14px;
   font-size: 0.78rem;
   color: var(--text-secondary);
@@ -593,7 +597,7 @@ main { flex: 1; }
 .mit-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 14px;
+  gap: 12px;
 }
 
 .mit-card {
@@ -612,8 +616,8 @@ main { flex: 1; }
   font-weight: 700;
   color: var(--accent);
   background: var(--accent-glow);
-  border: 1px solid rgba(79,142,247,0.25);
-  border-radius: 5px;
+  border: 1px solid rgba(232,17,35,0.25);
+  border-radius: 3px;
   padding: 3px 8px;
   white-space: nowrap;
   flex-shrink: 0;
@@ -630,7 +634,7 @@ main { flex: 1; }
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0,0,0,0.85);
   backdrop-filter: blur(4px);
   z-index: 200;
   display: flex;
@@ -666,14 +670,14 @@ main { flex: 1; }
   border: 1px solid var(--border);
   color: var(--text-secondary);
   width: 32px; height: 32px;
-  border-radius: 50%;
+  border-radius: 4px;
   font-size: 1.2rem;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: all var(--transition);
   z-index: 1;
 }
-.modal-close:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+.modal-close:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 
 .modal-body { padding: 28px 32px 32px; }
 
@@ -689,16 +693,16 @@ main { flex: 1; }
   font-size: 0.8rem;
   font-weight: 700;
   padding: 5px 12px;
-  border-radius: 6px;
+  border-radius: 4px;
   border: 1px solid;
   white-space: nowrap;
   flex-shrink: 0;
   margin-top: 4px;
 }
-.modal-badge.fw-OWASP_LLM_2025  { color: var(--owasp-llm); border-color: var(--owasp-llm); background: var(--owasp-llm-bg); }
+.modal-badge.fw-OWASP_LLM_2025    { color: var(--owasp-llm); border-color: var(--owasp-llm); background: var(--owasp-llm-bg); }
 .modal-badge.fw-OWASP_AGENTIC_2026 { color: var(--owasp-ag); border-color: var(--owasp-ag); background: var(--owasp-ag-bg); }
-.modal-badge.fw-MITRE_ATLAS      { color: var(--mitre); border-color: var(--mitre); background: var(--mitre-bg); }
-.modal-badge.fw-NIST_CSF_2       { color: var(--nist); border-color: var(--nist); background: var(--nist-bg); }
+.modal-badge.fw-MITRE_ATLAS        { color: var(--mitre); border-color: var(--mitre); background: var(--mitre-bg); }
+.modal-badge.fw-NIST_CSF_2         { color: var(--nist); border-color: var(--nist); background: var(--nist-bg); }
 
 .modal-title { font-size: 1.4rem; font-weight: 800; line-height: 1.25; }
 .modal-fw-name { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
@@ -728,7 +732,7 @@ main { flex: 1; }
 .modal-tag {
   font-size: 0.75rem;
   padding: 3px 10px;
-  border-radius: 4px;
+  border-radius: 3px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   color: var(--text-secondary);
@@ -763,8 +767,8 @@ main { flex: 1; }
   font-weight: 700;
   color: var(--accent);
   background: var(--accent-glow);
-  border: 1px solid rgba(79,142,247,0.2);
-  border-radius: 4px;
+  border: 1px solid rgba(232,17,35,0.2);
+  border-radius: 3px;
   padding: 2px 7px;
   white-space: nowrap;
   flex-shrink: 0;
@@ -780,7 +784,7 @@ main { flex: 1; }
 /* assessment controls section */
 .mit-assessment {
   border-top: 1px solid var(--border);
-  background: var(--bg-surface);
+  background: var(--bg-base);
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
@@ -808,7 +812,7 @@ main { flex: 1; }
   width: fit-content;
   min-width: 180px;
   padding: 6px 28px 6px 10px;
-  border-radius: 6px;
+  border-radius: 4px;
   border: 1px solid var(--border);
   font-size: 0.8rem;
   font-weight: 600;
@@ -822,7 +826,7 @@ main { flex: 1; }
 .mit-impl-select:hover { border-color: var(--text-muted); }
 
 .mit-impl-select.impl-effective       { background-color: rgba(34,197,94,0.1);   border-color: #22c55e; color: #22c55e; }
-.mit-impl-select.impl-not-effective   { background-color: rgba(239,68,68,0.1);   border-color: #ef4444; color: #ef4444; }
+.mit-impl-select.impl-not-effective   { background-color: rgba(232,17,35,0.1);   border-color: #E81123; color: #E81123; }
 .mit-impl-select.impl-alternate       { background-color: rgba(59,130,246,0.1);  border-color: #3b82f6; color: #3b82f6; }
 .mit-impl-select.impl-not-implemented { background-color: rgba(249,115,22,0.1);  border-color: #f97316; color: #f97316; }
 .mit-impl-select.impl-not-assessed    { background-color: var(--bg-card);        border-color: var(--border); color: var(--text-muted); }
@@ -833,7 +837,7 @@ main { flex: 1; }
   width: 100%;
   background: var(--bg-input);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 4px;
   color: var(--text-primary);
   padding: 8px 10px;
   font-size: 0.82rem;
@@ -878,7 +882,7 @@ main { flex: 1; }
   color: var(--text-muted);
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 3px;
   padding: 1px 6px;
   margin-left: 8px;
   vertical-align: middle;
@@ -940,10 +944,10 @@ main { flex: 1; }
   border: none;
   cursor: pointer;
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 3px;
   transition: color var(--transition);
 }
-.search-results-header button:hover { color: var(--text-primary); }
+.search-results-header button:hover { color: var(--accent); }
 
 /* ── Footer ── */
 .site-footer {
@@ -967,7 +971,7 @@ main { flex: 1; }
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-base); }
-::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
 /* ── Home two-column layout ── */
@@ -1026,16 +1030,16 @@ main { flex: 1; }
 
 .risk-progress-bar {
   flex: 1;
-  height: 5px;
+  height: 4px;
   background: var(--bg-surface);
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .risk-progress-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--risk-medium), var(--risk-high), var(--risk-critical));
-  border-radius: 3px;
+  border-radius: 2px;
   transition: width 0.4s ease;
 }
 
@@ -1126,7 +1130,7 @@ main { flex: 1; }
   font-size: 0.68rem;
   font-weight: 700;
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: 3px;
   border: 1px solid;
   white-space: nowrap;
 }
@@ -1145,7 +1149,7 @@ main { flex: 1; }
   content: '';
   position: absolute;
   top: 0; left: 0;
-  width: 100%; height: 4px;
+  width: 100%; height: 3px;
 }
 .risk-detail-header.risk-header-risk-critical::after { background: var(--risk-critical); }
 .risk-detail-header.risk-header-risk-high::after     { background: var(--risk-high); }
@@ -1166,7 +1170,7 @@ main { flex: 1; }
   align-items: center;
   gap: 6px;
   padding: 5px 14px;
-  border-radius: 20px;
+  border-radius: 4px;
   font-size: 0.78rem;
   font-weight: 600;
   border: 1px solid var(--border);
@@ -1187,7 +1191,7 @@ main { flex: 1; }
   appearance: none;
   -webkit-appearance: none;
   padding: 5px 28px 5px 10px;
-  border-radius: 6px;
+  border-radius: 4px;
   border: 1px solid var(--border);
   font-size: 0.75rem;
   font-weight: 600;
