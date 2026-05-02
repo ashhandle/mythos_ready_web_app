@@ -868,6 +868,55 @@ main { flex: 1; }
 .modal-ext-link::after { content: '↗'; }
 .modal-ext-link:hover { text-decoration: underline; }
 
+/* ── Computed risk display (modal) ── */
+.computed-label {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.computed-risk-display {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.computed-risk-level {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.computed-level-text {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.computed-level-text.risk-critical { color: var(--risk-critical); }
+.computed-level-text.risk-high     { color: var(--risk-high); }
+.computed-level-text.risk-medium   { color: var(--risk-medium); }
+.computed-level-text.risk-none     { color: var(--risk-none); }
+
+.computed-risk-basis {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
 /* ── Empty/no results ── */
 .empty-state {
   text-align: center;

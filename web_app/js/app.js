@@ -1,7 +1,6 @@
 'use strict';
 
 const RISK_LEVELS = ['Critical', 'High', 'Medium', 'Not Assessed'];
-const RISK_STORAGE_KEY = 'mythos_risk_levels';
 const RISK_META = {
   'Critical':     { dot: '🔴', cls: 'risk-critical' },
   'High':         { dot: '🟠', cls: 'risk-high'     },
@@ -25,30 +24,65 @@ const App = {
   mitMap: {},
   fwCodeCounts: {},
 
-  // ── Risk persistence (localStorage) ──────────────────────────────────────
+  // ── Computed risk engine ──────────────────────────────────────────────────
+  // Risk level is derived from mitigation control implementation status.
+  // "Not Assessed" and "Not Applicable" are treated as null and excluded.
+  // Remaining active mitigations:
+  //   all Effective / Alternate Control   → Medium
+  //   all Not Effective / Not Implemented → Critical
+  //   mixed                               → High
+  //   none active                         → Not Assessed
 
-  getRiskLevels() {
-    try { return JSON.parse(localStorage.getItem(RISK_STORAGE_KEY) || '{}'); }
-    catch { return {}; }
-  },
+  computeCodeRisk(code) {
+    const c = this.data.codes.find(x => x.code === code);
+    if (!c) return { level: 'Not Assessed', basis: 'Code not found.' };
 
-  setRiskLevel(code, level) {
-    const levels = this.getRiskLevels();
-    if (level === 'Not Assessed') { delete levels[code]; }
-    else { levels[code] = level; }
-    localStorage.setItem(RISK_STORAGE_KEY, JSON.stringify(levels));
+    const controls = this.getMitControls();
+    const GOOD = new Set(['Effective', 'Alternate Control']);
+    const BAD  = new Set(['Not Effective', 'Not Implemented']);
+
+    const active = c.mitigations.filter(id => {
+      const impl = controls[id]?.implementation || 'Not Assessed';
+      return impl !== 'Not Assessed' && impl !== 'Not Applicable';
+    });
+
+    if (active.length === 0) {
+      return {
+        level: 'Not Assessed',
+        basis: 'No mitigations assessed — set Control Implementation values below to calculate risk.',
+      };
+    }
+
+    const good = active.filter(id => GOOD.has(controls[id].implementation));
+    const bad  = active.filter(id => BAD.has(controls[id].implementation));
+    const n    = active.length;
+    const pl   = n === 1 ? '' : 's';
+
+    if (bad.length === 0) {
+      return {
+        level: 'Medium',
+        basis: `All ${n} assessed mitigation${pl} are effective or have alternate controls.`,
+      };
+    }
+    if (good.length === 0) {
+      return {
+        level: 'Critical',
+        basis: `All ${n} assessed mitigation${pl} are not effective or not implemented.`,
+      };
+    }
+    return {
+      level: 'High',
+      basis: `${good.length} of ${n} assessed mitigations effective; ${bad.length} not effective or not implemented.`,
+    };
   },
 
   getCodeRiskLevel(code) {
-    return this.getRiskLevels()[code] || 'Not Assessed';
+    return this.computeCodeRisk(code).level;
   },
 
   getRiskCounts() {
-    const levels = this.getRiskLevels();
     const counts = { 'Critical': 0, 'High': 0, 'Medium': 0, 'Not Assessed': 0 };
-    let assigned = 0;
-    Object.values(levels).forEach(l => { if (counts[l] !== undefined) { counts[l]++; assigned++; } });
-    counts['Not Assessed'] = this.data.codes.length - assigned;
+    this.data.codes.forEach(c => { counts[this.getCodeRiskLevel(c.code)]++; });
     return counts;
   },
 
@@ -71,6 +105,38 @@ const App = {
     const allCls = Object.values(IMPL_META).map(m => m.cls);
     selectEl.classList.remove(...allCls);
     selectEl.classList.add(IMPL_META[value].cls);
+    // Risk is derived from control status — refresh displays after every change
+    this.refreshModalRisk();
+    this.refreshCodeRowBadge(this._currentModalCode);
+  },
+
+  refreshModalRisk() {
+    const display = document.getElementById('modal-computed-risk');
+    if (!display || !this._currentModalCode) return;
+    const { level, basis } = this.computeCodeRisk(this._currentModalCode);
+    const meta = RISK_META[level];
+    display.innerHTML = `
+      <div class="computed-risk-level">
+        <span class="risk-dot ${meta.cls}"></span>
+        <span class="computed-level-text ${meta.cls}">${level}</span>
+        <span class="computed-label">auto-calculated</span>
+      </div>
+      <p class="computed-risk-basis">${basis}</p>`;
+  },
+
+  refreshCodeRowBadge(code) {
+    if (!code) return;
+    const metaEl = document.querySelector(`.code-row[data-code="${code}"] .code-row-meta`);
+    if (!metaEl) return;
+    const existing = metaEl.querySelector('.risk-level-badge');
+    if (existing) existing.remove();
+    const level = this.getCodeRiskLevel(code);
+    if (level !== 'Not Assessed') {
+      const badge = document.createElement('span');
+      badge.className = `risk-level-badge ${RISK_META[level].cls}`;
+      badge.textContent = level;
+      metaEl.insertBefore(badge, metaEl.firstChild);
+    }
   },
 
   saveMitJustification(mitId, value, textarea) {
@@ -243,14 +309,14 @@ const App = {
     }).join('');
 
     const resetBtn = assessed > 0
-      ? `<button class="risk-reset-btn" onclick="App.resetAllRiskLevels()">Reset all assessments</button>`
+      ? `<button class="risk-reset-btn" onclick="App.resetAllControls()">Reset all control assessments</button>`
       : '';
 
     return `
       <div class="risk-widget">
         <div class="risk-widget-header">
           <div class="risk-widget-title"><span class="risk-widget-icon">&#x26A0;</span> Risk Assessment</div>
-          <span class="risk-widget-sub">Assign a risk level to each code</span>
+          <span class="risk-widget-sub">Derived from control implementation status</span>
         </div>
         <div class="risk-progress-wrap">
           <div class="risk-progress-bar">
@@ -263,9 +329,9 @@ const App = {
       </div>`;
   },
 
-  resetAllRiskLevels() {
-    if (confirm('Reset all risk level assignments? This cannot be undone.')) {
-      localStorage.removeItem(RISK_STORAGE_KEY);
+  resetAllControls() {
+    if (confirm('Reset all control implementation assessments and justifications? This cannot be undone.')) {
+      localStorage.removeItem(MIT_CONTROLS_KEY);
       this.route();
     }
   },
@@ -274,12 +340,8 @@ const App = {
 
   viewRiskLevel(level) {
     if (!RISK_LEVELS.includes(level)) return '<div class="loading-state"><p>Unknown risk level.</p></div>';
-    const meta = RISK_META[level];
-    const riskLevels = this.getRiskLevels();
-
-    const codes = level === 'Not Assessed'
-      ? this.data.codes.filter(c => !riskLevels[c.code])
-      : this.data.codes.filter(c => riskLevels[c.code] === level);
+    const meta  = RISK_META[level];
+    const codes = this.data.codes.filter(c => this.getCodeRiskLevel(c.code) === level);
 
     const navChips = RISK_LEVELS.map(l => {
       const m = RISK_META[l];
@@ -288,8 +350,8 @@ const App = {
     }).join('');
 
     const emptyMsg = level === 'Not Assessed'
-      ? { h: 'All codes have been assessed', p: 'Every code has a risk level assigned.' }
-      : { h: `No ${level} codes yet`, p: `Open any code and assign it <strong>${level}</strong> risk from the detail view.` };
+      ? { h: 'All codes have a computed risk level', p: 'Every code has at least one active mitigation assessment.' }
+      : { h: `No codes currently at ${level} risk`, p: `Risk levels are calculated automatically from the Control Implementation values on each code's mitigations.` };
 
     return `
       <div class="risk-detail-header risk-header-${meta.cls}">
@@ -299,61 +361,18 @@ const App = {
             <span class="risk-dot ${meta.cls} risk-dot-lg"></span>
             <h1>${level} Risk</h1>
           </div>
-          <p>${codes.length} ${codes.length === 1 ? 'code' : 'codes'} ${level === 'Not Assessed' ? 'pending assessment' : 'at this risk level'}</p>
+          <p>${codes.length} ${codes.length === 1 ? 'code' : 'codes'} — risk derived from mitigation control status</p>
           <div class="fw-meta-row" style="margin-top:16px">${navChips}</div>
         </div>
       </div>
       <div class="page-section">
         <div class="codes-list" id="risk-codes-list">
           ${codes.length
-            ? codes.map(c => this.renderCodeRowWithSelector(c)).join('')
+            ? codes.map(c => this.renderCodeRow(c)).join('')
             : `<div class="empty-state"><h3>${emptyMsg.h}</h3><p>${emptyMsg.p}</p></div>`
           }
         </div>
       </div>`;
-  },
-
-  renderCodeRowWithSelector(c) {
-    const current = this.getCodeRiskLevel(c.code);
-    const desc = c.description.length > 110 ? c.description.slice(0, 110) + '…' : c.description;
-    const options = RISK_LEVELS.map(l =>
-      `<option value="${l}" ${l === current ? 'selected' : ''}>${RISK_META[l].dot} ${l}</option>`
-    ).join('');
-    return `
-      <div class="code-row" data-fw="${c.framework_id}" data-code="${c.code}" onclick="App.openCode('${c.code}')">
-        <span class="code-badge fw-${c.framework_id}">${c.code}</span>
-        <div class="code-row-body">
-          <div class="code-row-name">${c.name}</div>
-          <div class="code-row-desc">${desc}</div>
-        </div>
-        <div class="code-row-meta" onclick="event.stopPropagation()">
-          <select class="risk-inline-select risk-select-${RISK_META[current].cls}"
-            onchange="App.setRiskLevelFromRow('${c.code}', this.value, this)">
-            ${options}
-          </select>
-          <span class="mit-count">${c.mitigations.length} mitigations</span>
-        </div>
-      </div>`;
-  },
-
-  setRiskLevelFromRow(code, level, selectEl) {
-    this.setRiskLevel(code, level);
-    selectEl.className = `risk-inline-select risk-select-${RISK_META[level].cls}`;
-
-    // If the new level no longer matches this page, fade-remove the row
-    const pageLevel = decodeURIComponent(window.location.hash.replace('#/risk/', ''));
-    if (level !== pageLevel) {
-      const row = selectEl.closest('.code-row');
-      if (row) {
-        row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        row.style.opacity = '0';
-        row.style.transform = 'translateX(16px)';
-        setTimeout(() => {
-          row.remove();
-          if (!document.querySelector('#risk-codes-list .code-row')) this.route();
-        }, 300);
-      }
-    }
   },
 
   // ── Framework card ────────────────────────────────────────────────────────
@@ -498,6 +517,7 @@ const App = {
     const c = this.data.codes.find(x => x.code === code);
     if (!c) return;
 
+    this._currentModalCode = c.code;
     const mits = c.mitigations.map(id => this.renderModalMitItem(id)).join('');
 
     const rankBadge  = c.rank           ? `<span class="modal-tag">Rank #${c.rank}</span>`                        : '';
@@ -506,13 +526,8 @@ const App = {
     const subTag     = c.is_subtechnique? `<span class="modal-tag">Sub-technique of ${c.technique_parent}</span>` : '';
     const nistFn     = c.function       ? `<span class="modal-tag">Function: ${c.function}</span>`                : '';
 
-    const currentLevel = this.getCodeRiskLevel(c.code);
-    const riskButtons = RISK_LEVELS.map(l => `
-      <button class="modal-risk-btn ${RISK_META[l].cls} ${l === currentLevel ? 'active' : ''}"
-        id="modal-risk-btn-${l.replace(/\s/g, '-')}"
-        onclick="App.setRiskLevelFromModal('${c.code}', '${l}')">
-        <span class="risk-dot ${RISK_META[l].cls}"></span>${l}
-      </button>`).join('');
+    const { level: computedLevel, basis: computedBasis } = this.computeCodeRisk(c.code);
+    const riskMeta = RISK_META[computedLevel];
 
     document.getElementById('modal-body').innerHTML = `
       <div class="modal-body">
@@ -525,8 +540,16 @@ const App = {
         </div>
 
         <div class="modal-section">
-          <div class="modal-section-label">Risk Level</div>
-          <div class="modal-risk-selector">${riskButtons}</div>
+          <div class="modal-section-label">
+            Risk Level <span class="computed-label">auto-calculated</span>
+          </div>
+          <div class="computed-risk-display" id="modal-computed-risk">
+            <div class="computed-risk-level">
+              <span class="risk-dot ${riskMeta.cls}"></span>
+              <span class="computed-level-text ${riskMeta.cls}">${computedLevel}</span>
+            </div>
+            <p class="computed-risk-basis">${computedBasis}</p>
+          </div>
         </div>
 
         <div class="modal-section">
@@ -555,36 +578,6 @@ const App = {
 
     document.getElementById('modal-overlay').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-  },
-
-  setRiskLevelFromModal(code, level) {
-    this.setRiskLevel(code, level);
-
-    // Update button active states in modal
-    RISK_LEVELS.forEach(l => {
-      const btn = document.getElementById(`modal-risk-btn-${l.replace(/\s/g, '-')}`);
-      if (btn) btn.classList.toggle('active', l === level);
-    });
-
-    // Update risk badge on any visible code row behind the modal
-    const meta = document.querySelector(`.code-row[data-code="${code}"] .code-row-meta`);
-    if (meta) {
-      const existing = meta.querySelector('.risk-level-badge');
-      if (existing) existing.remove();
-      if (level !== 'Not Assessed') {
-        const badge = document.createElement('span');
-        badge.className = `risk-level-badge ${RISK_META[level].cls}`;
-        badge.textContent = level;
-        meta.insertBefore(badge, meta.firstChild);
-      }
-    }
-
-    // Also update the inline select on risk detail pages
-    const sel = document.querySelector(`.code-row[data-code="${code}"] .risk-inline-select`);
-    if (sel) {
-      sel.value = level;
-      sel.className = `risk-inline-select risk-select-${RISK_META[level].cls}`;
-    }
   },
 
   closeModal() {
