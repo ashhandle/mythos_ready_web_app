@@ -21,6 +21,7 @@ const MIT_CONTROLS_KEY = 'mythos_mit_controls';
 
 const App = {
   data: null,
+  falconData: null,
   mitMap: {},
   fwCodeCounts: {},
 
@@ -190,8 +191,12 @@ const App = {
 
   async init() {
     try {
-      const res = await fetch('data/mythos_framework_codes.json');
-      this.data = await res.json();
+      const [fwRes, falconRes] = await Promise.all([
+        fetch('data/mythos_framework_codes.json'),
+        fetch('data/falcon_products.json'),
+      ]);
+      this.data       = await fwRes.json();
+      this.falconData = await falconRes.json();
       this.buildIndices();
       this.setupGlobalSearch();
       const vEl = document.getElementById('nav-version');
@@ -273,6 +278,7 @@ const App = {
         <div class="framework-grid">
           ${d.frameworks.map(fw => this.renderFwCard(fw)).join('')}
         </div>
+        ${this.renderFalconSection()}
         <div class="section-heading" style="margin-top:40px">
           <h2>Recent Codes</h2>
           <span class="count">${d.codes.length} total &mdash; <a href="#/codes">view all</a></span>
@@ -367,6 +373,61 @@ const App = {
         </div>
         <div class="risk-levels-list">${items}</div>
         ${resetBtn}
+      </div>`;
+  },
+
+  // ── Falcon modules section ────────────────────────────────────────────────
+
+  renderFalconSection() {
+    if (!this.falconData) return '';
+    const domains = Object.entries(this.falconData.data);
+    const totalProducts = domains.reduce((n, [, prods]) => n + prods.length, 0);
+    return `
+      <div class="section-heading" style="margin-top:40px">
+        <h2>Falcon Platform Modules</h2>
+        <span class="count">${domains.length} domains &nbsp;&middot;&nbsp; ${totalProducts} products</span>
+      </div>
+      <div class="falcon-grid">
+        ${domains.map(([domain, products]) => this.renderFalconCard(domain, products)).join('')}
+      </div>`;
+  },
+
+  renderFalconCard(domain, products) {
+    const icons = {
+      'ENDPOINT SECURITY':             '&#x1F6E1;',
+      'NEXT-GEN IDENTITY':             '&#x1F510;',
+      'BROWSER SECURITY':              '&#x1F310;',
+      'CLOUD SECURITY':                '&#x2601;',
+      'NEXT-GEN SIEM':                 '&#x1F4CA;',
+      'DATA SECURITY':                 '&#x1F512;',
+      'EXPOSURE MANAGEMENT':           '&#x1F50D;',
+      'IT AUTOMATION':                 '&#x2699;',
+      'AIDR':                          '&#x1F916;',
+      'CHARLOTTE AI':                  '&#x2728;',
+      'COUNTER ADVERSARY OPERATIONS':  '&#x1F3AF;',
+      'FALCON COMPLETE':               '&#x1F985;',
+    };
+    const icon = icons[domain] || '&#x1F4E6;';
+    const count = products.length;
+    const productList = count > 0
+      ? products.slice(0, 4).map(p =>
+          `<span class="falcon-product-tag">${p.product}</span>`
+        ).join('') + (count > 4 ? `<span class="falcon-product-more">+${count - 4} more</span>` : '')
+      : '<span class="falcon-product-tag falcon-product-tag--empty">Coming soon</span>';
+
+    return `
+      <div class="falcon-card">
+        <div class="fw-card-header">
+          <div class="fw-icon falcon-icon">${icon}</div>
+          <span class="fw-version falcon-domain-badge">FALCON</span>
+        </div>
+        <div>
+          <h3 class="falcon-card-title">${domain}</h3>
+          <div class="falcon-products">${productList}</div>
+        </div>
+        <div class="fw-card-footer">
+          <div class="fw-code-count"><strong>${count}</strong> ${count === 1 ? 'product' : 'products'}</div>
+        </div>
       </div>`;
   },
 

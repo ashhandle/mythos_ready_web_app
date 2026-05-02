@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "crowdstrike-falcon-platform-schema",
+  "schemaVersion": "1.0.0",
+  "generatedDate": "2026-05-02",
+  "description": "CrowdStrike Falcon Platform product catalog schema defining all modules and their configurations across security domains",
+  "data": {
+    "ENDPOINT SECURITY": [
+      {
+        "product": "Falcon Insight XDR",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Prevent",
+        "configuration": []
+      },
+      {
+        "product": "Falcon for Mobile",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Insight for ChromeOS",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Insight for IoT",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Firewall Management",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Device Control",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Forensics",
+        "configuration": []
+      }
+    ],
+    "NEXT-GEN IDENTITY": [
+      {
+        "product": "Falcon Identity Threat Detection",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Identity Threat Protection",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Privileged Access",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Shield",
+        "configuration": []
+      },
+      {
+        "product": "Continuous Authorization (SGNL)",
+        "configuration": []
+      }
+    ],
+    "BROWSER SECURITY": [
+      {
+        "product": "Browser Security (Seraphic)",
+        "configuration": []
+      }
+    ],
+    "CLOUD SECURITY": [
+      {
+        "product": "Falcon Cloud Security",
+        "configuration": []
+      },
+      {
+        "product": "Falcon ASPM",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Cloud Security for Containers",
+        "configuration": []
+      }
+    ],
+    "NEXT-GEN SIEM": [
+      {
+        "product": "Falcon Next-Gen SIEM",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Search Retention",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Logscale",
+        "configuration": []
+      },
+      {
+        "product": "Onum",
+        "configuration": []
+      }
+    ],
+    "DATA SECURITY": [
+      {
+        "product": "Falcon Data Security",
+        "configuration": []
+      }
+    ],
+    "EXPOSURE MANAGEMENT": [
+      {
+        "product": "Falcon Exposure Management",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Discover",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Spotlight",
+        "configuration": []
+      },
+      {
+        "product": "Falcon Surface",
+        "configuration": []
+      },
+      {
+        "product": "Discover for IoT",
+        "configuration": []
+      },
+      {
+        "product": "Falcon FileVantage",
+        "configuration": []
+      }
+    ],
+    "IT AUTOMATION": [
+      {
+        "product": "Falcon for IT",
+        "configuration": []
+      }
+    ],
+    "AIDR": [
+      {
+        "product": "Falcon AIDR",
+        "configuration": []
+      }
+    ],
+    "CHARLOTTE AI": [
+      {
+        "product": "Agentic",
+        "configuration": []
+      },
+      {
+        "product": "AgentWorks",
+        "configuration": []
+      }
+    ],
+    "COUNTER ADVERSARY OPERATIONS": [],
+    "FALCON COMPLETE": []
+  }
+}

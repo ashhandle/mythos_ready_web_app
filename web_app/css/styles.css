@@ -413,6 +413,90 @@ main { flex: 1; }
 .fw-card[data-fw="MITRE_ATLAS"] .fw-prefix-tag        { color: var(--mitre); border-color: var(--mitre); background: var(--mitre-bg); }
 .fw-card[data-fw="NIST_CSF_2"] .fw-prefix-tag         { color: var(--nist); border-color: var(--nist); background: var(--nist-bg); }
 
+/* ── Falcon module cards ── */
+.falcon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.falcon-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+.falcon-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.falcon-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+
+.falcon-icon { background: var(--accent-glow) !important; }
+
+.falcon-domain-badge {
+  color: var(--accent) !important;
+  border-color: rgba(232,17,35,0.3) !important;
+  background: var(--accent-glow) !important;
+}
+
+.falcon-card-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.falcon-products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.falcon-product-tag {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.falcon-product-tag--empty {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.falcon-product-more {
+  font-size: 0.72rem;
+  color: var(--accent);
+  background: var(--accent-glow);
+  border: 1px solid rgba(232,17,35,0.25);
+  border-radius: 3px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
 /* ── Code list ── */
 .filter-bar {
   display: flex;
