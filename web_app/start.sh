@@ -1,7 +1,7 @@
 #!/bin/bash
 PORT=8080
 echo ""
-echo "  ⬡  MythosReady — AI Security Framework Explorer"
+echo "  ⬡  FrontierAI Ready — AI Security Control Readiness"
 echo "  ─────────────────────────────────────────────"
 echo "  Starting local server on http://localhost:$PORT"
 echo "  Press Ctrl+C to stop."
