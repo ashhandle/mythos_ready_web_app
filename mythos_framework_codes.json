@@ -1,0 +1,1511 @@
+{
+  "schema_version": "1.2.0",
+  "source_document": "csamythosreadyv92",
+  "generated_date": "2026-05-02",
+  "description": "Harmonised JSON structures for all framework codes defined in the Mythos Risk Register Legend (Appendix B). Four source frameworks are represented: OWASP LLM Top 10 2025, OWASP Agentic Top 10 2026, MITRE ATLAS, and NIST CSF 2.0. Version 1.2.0 extracts mitigations into a deduplicated top-level registry; codes reference mitigations by mitigation_id.",
+  "frameworks": [
+    {
+      "framework_id": "OWASP_LLM_2025",
+      "name": "OWASP Top 10 for LLM Applications",
+      "version": "2025",
+      "code_prefix": "LLMxx",
+      "scope": "Risks in LLMs used as application components",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-llm-applications-2025/"
+    },
+    {
+      "framework_id": "OWASP_AGENTIC_2026",
+      "name": "OWASP Top 10 for Agentic Applications",
+      "version": "2026",
+      "code_prefix": "ASIxx",
+      "scope": "Risks in autonomous AI systems that plan and act",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+    },
+    {
+      "framework_id": "MITRE_ATLAS",
+      "name": "MITRE ATLAS",
+      "version": "current",
+      "code_prefix": "AML.Txxxx",
+      "scope": "Adversarial techniques targeting AI/ML systems",
+      "url": "https://atlas.mitre.org/"
+    },
+    {
+      "framework_id": "NIST_CSF_2",
+      "name": "NIST Cybersecurity Framework",
+      "version": "2.0",
+      "code_prefix": "XX.xx",
+      "scope": "Cybersecurity risk management across governance, identification, protection, detection, and response",
+      "url": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf"
+    }
+  ],
+  "mitigations": [
+    {
+      "mitigation_id": "MIT-001",
+      "description": "Constrain model behaviour by defining a strict role in the system prompt and enforcing adherence to specific tasks using deterministic rules"
+    },
+    {
+      "mitigation_id": "MIT-002",
+      "description": "Segregate and clearly label external/untrusted content to minimise its influence on the active prompt"
+    },
+    {
+      "mitigation_id": "MIT-003",
+      "description": "Apply semantic input validation and output filters to detect and block potentially harmful content before and after model inference"
+    },
+    {
+      "mitigation_id": "MIT-004",
+      "description": "Implement privilege separation between user-controlled input channels and system instructions"
+    },
+    {
+      "mitigation_id": "MIT-005",
+      "description": "Conduct regular adversarial red-teaming and fuzz testing to evaluate model resilience to injection variants"
+    },
+    {
+      "mitigation_id": "MIT-006",
+      "description": "Monitor production inputs and outputs for anomalous instruction patterns and escalate detections for triage"
+    },
+    {
+      "mitigation_id": "MIT-007",
+      "description": "Apply PII detection and scrubbing to model inputs and outputs before storage or transmission"
+    },
+    {
+      "mitigation_id": "MIT-008",
+      "description": "Train users on safe LLM interaction practices including which data categories must not be submitted"
+    },
+    {
+      "mitigation_id": "MIT-009",
+      "description": "Publish and enforce transparent data-handling policies covering collection, retention, and deletion; provide opt-out from training data inclusion"
+    },
+    {
+      "mitigation_id": "MIT-010",
+      "description": "Apply adversarial robustness training to reduce model susceptibility to extraction prompts"
+    },
+    {
+      "mitigation_id": "MIT-011",
+      "description": "Enforce data minimisation in system prompt design — include only information the model strictly requires"
+    },
+    {
+      "mitigation_id": "MIT-012",
+      "description": "Restrict system prompt access so it cannot be directly retrieved by users through jailbreak or extraction prompts"
+    },
+    {
+      "mitigation_id": "MIT-013",
+      "description": "Treat all LLM-generated content as untrusted input to downstream components — apply context-appropriate encoding (HTML, SQL, shell) before use"
+    },
+    {
+      "mitigation_id": "MIT-014",
+      "description": "Implement output sanitisation aligned with OWASP secure coding practices prior to rendering or passing to interpreters"
+    },
+    {
+      "mitigation_id": "MIT-015",
+      "description": "Integrate SAST and DAST tooling in the development pipeline to detect output-handling vulnerabilities before deployment"
+    },
+    {
+      "mitigation_id": "MIT-016",
+      "description": "Validate and constrain output schemas where the LLM produces structured output (JSON, SQL, code) to enforce expected formats"
+    },
+    {
+      "mitigation_id": "MIT-017",
+      "description": "Sandbox code execution environments to limit blast radius when LLM-generated code is executed"
+    },
+    {
+      "mitigation_id": "MIT-018",
+      "description": "Apply the principle of least privilege — grant LLM extensions only the minimum permissions required for each specific task"
+    },
+    {
+      "mitigation_id": "MIT-019",
+      "description": "Require human-in-the-loop approval for high-impact or irreversible actions (sending messages, deleting records, making purchases)"
+    },
+    {
+      "mitigation_id": "MIT-020",
+      "description": "Implement rate limiting to restrict the number of actions an LLM extension can perform per timeframe, enabling detection before significant damage occurs"
+    },
+    {
+      "mitigation_id": "MIT-021",
+      "description": "Log and monitor all LLM-initiated actions on downstream systems for anomalous or unintended behaviour"
+    },
+    {
+      "mitigation_id": "MIT-022",
+      "description": "Scope tools and plugins to narrow, well-defined functions and avoid general-purpose capabilities where specific ones suffice"
+    },
+    {
+      "mitigation_id": "MIT-023",
+      "description": "Enforce RBAC and least-privilege access controls on vector stores and embedding repositories"
+    },
+    {
+      "mitigation_id": "MIT-024",
+      "description": "Maintain a centralised, governed model and embedding registry with access logging and integrity verification"
+    },
+    {
+      "mitigation_id": "MIT-025",
+      "description": "Validate and sanitise all documents before ingestion into the retrieval pipeline to prevent poisoning"
+    },
+    {
+      "mitigation_id": "MIT-026",
+      "description": "Monitor embedding stores for unexpected updates, anomalous query patterns, or high-similarity results from untrusted sources"
+    },
+    {
+      "mitigation_id": "MIT-027",
+      "description": "Segment sensitive embeddings into separate namespaces with stricter access controls to limit extraction blast radius"
+    },
+    {
+      "mitigation_id": "MIT-028",
+      "description": "Apply structured planning constraints that limit the scope of goals an agent can adopt at runtime"
+    },
+    {
+      "mitigation_id": "MIT-029",
+      "description": "Validate and label all external content before it enters the agent's context window — never treat retrieved content as instructions"
+    },
+    {
+      "mitigation_id": "MIT-030",
+      "description": "Enforce privilege separation between the agent's planning layer and its execution layer"
+    },
+    {
+      "mitigation_id": "MIT-031",
+      "description": "Implement anomaly detection on agent behaviour to identify goal drift from the original task specification"
+    },
+    {
+      "mitigation_id": "MIT-032",
+      "description": "Require human confirmation before the agent commits to irreversible or high-impact goal reorientation"
+    },
+    {
+      "mitigation_id": "MIT-033",
+      "description": "Use cryptographic verification for agent-to-agent messages to prevent forged orchestration instructions"
+    },
+    {
+      "mitigation_id": "MIT-034",
+      "description": "Apply strict tool permission scoping — each tool invocation should be authorised against a policy that checks the calling agent's identity and intent"
+    },
+    {
+      "mitigation_id": "MIT-035",
+      "description": "Execute tool calls within sandboxed environments with strict filesystem, network egress, and resource controls"
+    },
+    {
+      "mitigation_id": "MIT-036",
+      "description": "Validate all tool arguments before execution and reject invocations that fall outside the expected parameter envelope"
+    },
+    {
+      "mitigation_id": "MIT-037",
+      "description": "Treat all model-generated tool call outputs as untrusted data — validate before downstream consumption"
+    },
+    {
+      "mitigation_id": "MIT-038",
+      "description": "Log every tool invocation with full argument and response context for audit and anomaly detection"
+    },
+    {
+      "mitigation_id": "MIT-039",
+      "description": "Prohibit unsafe tool chaining patterns identified through threat modelling"
+    },
+    {
+      "mitigation_id": "MIT-040",
+      "description": "Issue ephemeral X.509 or SSH certificates scoped to specific tasks rather than static long-lived API keys"
+    },
+    {
+      "mitigation_id": "MIT-041",
+      "description": "Apply least-privilege credential scoping so each agent credential grants only the minimum permissions required"
+    },
+    {
+      "mitigation_id": "MIT-042",
+      "description": "Implement just-in-time (JIT) access provisioning with automatic expiry for elevated permissions"
+    },
+    {
+      "mitigation_id": "MIT-043",
+      "description": "Use attribute-based access control (ABAC) to tie agent authorisation to verified runtime context"
+    },
+    {
+      "mitigation_id": "MIT-044",
+      "description": "Monitor and alert on unexpected credential usage patterns such as access from new IP ranges or outside normal operating hours"
+    },
+    {
+      "mitigation_id": "MIT-045",
+      "description": "Rotate credentials automatically and invalidate on task completion to minimise exposure window"
+    },
+    {
+      "mitigation_id": "MIT-046",
+      "description": "Vet and approve third-party agents, plugins, and tools before allowlisting them in the agentic pipeline"
+    },
+    {
+      "mitigation_id": "MIT-047",
+      "description": "Maintain a signed software bill of materials (SBOM) for all agentic components including dynamically discovered ones"
+    },
+    {
+      "mitigation_id": "MIT-048",
+      "description": "Require cryptographic signatures from trusted registries before any component is integrated at runtime"
+    },
+    {
+      "mitigation_id": "MIT-049",
+      "description": "Monitor runtime component composition for unexpected additions or changes to the agent toolset"
+    },
+    {
+      "mitigation_id": "MIT-050",
+      "description": "Apply dependency pinning and integrity hashing to prevent silent substitution of components"
+    },
+    {
+      "mitigation_id": "MIT-051",
+      "description": "Perform periodic supply chain risk assessments and include agentic AI components in third-party risk programmes"
+    },
+    {
+      "mitigation_id": "MIT-052",
+      "description": "Rigorously vet and validate all data sources before ingestion into memory or embedding stores"
+    },
+    {
+      "mitigation_id": "MIT-053",
+      "description": "Implement data integrity checks (cryptographic hashing or signatures) on stored memory entries"
+    },
+    {
+      "mitigation_id": "MIT-054",
+      "description": "Maintain clear data lineage so the origin and modification history of each memory artefact is auditable"
+    },
+    {
+      "mitigation_id": "MIT-055",
+      "description": "Apply access controls restricting which agents and processes can write to long-term memory stores"
+    },
+    {
+      "mitigation_id": "MIT-056",
+      "description": "Conduct periodic memory sanitisation to detect and remove anomalous or adversarially crafted entries"
+    },
+    {
+      "mitigation_id": "MIT-057",
+      "description": "Alert on statistically unexpected writes or sudden shifts in stored context distributions"
+    },
+    {
+      "mitigation_id": "MIT-058",
+      "description": "Implement circuit breakers to automatically halt inter-agent propagation when error rates or task fan-out exceed defined thresholds"
+    },
+    {
+      "mitigation_id": "MIT-059",
+      "description": "Apply end-to-end encrypted channels with mutual authentication between agents to prevent forged messages from triggering downstream agents"
+    },
+    {
+      "mitigation_id": "MIT-060",
+      "description": "Use digital signatures and message hashing to protect inter-agent message integrity"
+    },
+    {
+      "mitigation_id": "MIT-061",
+      "description": "Apply anti-replay controls using nonces and timestamps to prevent retransmitted faulty messages from re-triggering workflows"
+    },
+    {
+      "mitigation_id": "MIT-062",
+      "description": "Maintain verified, attested agent registries with signed descriptors to prevent rogue agent injection"
+    },
+    {
+      "mitigation_id": "MIT-063",
+      "description": "Design agentic workflows with blast-radius containment — isolate tenants, domains, and task namespaces to limit cross-contamination"
+    },
+    {
+      "mitigation_id": "MIT-064",
+      "description": "Deploy continuous behavioural monitoring to detect goal drift, unexpected tool usage, or output anomalies in running agents"
+    },
+    {
+      "mitigation_id": "MIT-065",
+      "description": "Run each agent in an isolated containerised sandbox with strict network and filesystem controls to limit scope of compromise"
+    },
+    {
+      "mitigation_id": "MIT-066",
+      "description": "Require human oversight and approval gates for agents operating with elevated autonomy or accessing sensitive resources"
+    },
+    {
+      "mitigation_id": "MIT-067",
+      "description": "Implement agent attestation — cryptographically verify agent identity and integrity before it is admitted to a workflow"
+    },
+    {
+      "mitigation_id": "MIT-068",
+      "description": "Replay recorded agent action logs in isolated clone environments periodically to test for hidden harmful behaviours"
+    },
+    {
+      "mitigation_id": "MIT-069",
+      "description": "Apply anomaly detection on agent output streams to identify deviations from the agent's declared purpose"
+    },
+    {
+      "mitigation_id": "MIT-070",
+      "description": "Limit the public release of technical information about the ML stack including model architecture, training datasets, and framework versions (ATLAS AML.M0000)"
+    },
+    {
+      "mitigation_id": "MIT-071",
+      "description": "Restrict organisational disclosures such as researcher names, department structures, and deployment details from which model characteristics may be inferred"
+    },
+    {
+      "mitigation_id": "MIT-072",
+      "description": "Implement behavioural analytics and rate limiting on public-facing APIs and documentation portals to identify and throttle systematic reconnaissance patterns"
+    },
+    {
+      "mitigation_id": "MIT-073",
+      "description": "Apply access controls to model cards, internal wikis, and technical reports to limit exposure of operational ML details"
+    },
+    {
+      "mitigation_id": "MIT-074",
+      "description": "Monitor public repositories and forums for inadvertent disclosure of proprietary ML artefacts"
+    },
+    {
+      "mitigation_id": "MIT-075",
+      "description": "Use trusted, auditable training pipelines with data provenance tracking to detect unauthorised modifications to training data or fine-tuning datasets"
+    },
+    {
+      "mitigation_id": "MIT-076",
+      "description": "Validate model performance on out-of-distribution and adversarially crafted inputs specifically designed to probe for backdoor triggers"
+    },
+    {
+      "mitigation_id": "MIT-077",
+      "description": "Monitor deployed models for concept drift and training data drift, which may indicate data tampering or poisoning upstream"
+    },
+    {
+      "mitigation_id": "MIT-078",
+      "description": "Apply model scanning tools (e.g., backdoor detection via neural cleanse or activation clustering) before promoting models to production"
+    },
+    {
+      "mitigation_id": "MIT-079",
+      "description": "Enforce integrity verification on model artefacts at each stage of the ML pipeline — training, evaluation, packaging, and deployment"
+    },
+    {
+      "mitigation_id": "MIT-080",
+      "description": "Require strong authentication on all inference API endpoints — use short-lived tokens rather than persistent API keys where possible"
+    },
+    {
+      "mitigation_id": "MIT-081",
+      "description": "Apply rate limiting and query throttling per account and IP to impede systematic model extraction attempts"
+    },
+    {
+      "mitigation_id": "MIT-082",
+      "description": "Monitor API query patterns for characteristics of model extraction (high volume, diverse inputs, structured probing) and alert or block on detection"
+    },
+    {
+      "mitigation_id": "MIT-083",
+      "description": "Restrict inference API access to authorised clients via IP allowlisting or mTLS where the client population is known"
+    },
+    {
+      "mitigation_id": "MIT-084",
+      "description": "Implement query logging with sufficient detail to support forensic reconstruction of extraction campaigns"
+    },
+    {
+      "mitigation_id": "MIT-085",
+      "description": "Apply adversarial training by augmenting the training dataset with adversarial examples to improve model robustness"
+    },
+    {
+      "mitigation_id": "MIT-086",
+      "description": "Use network distillation to produce smoother decision boundaries less susceptible to adversarial perturbations"
+    },
+    {
+      "mitigation_id": "MIT-087",
+      "description": "Implement input pre-processing defences including feature squeezing, randomised smoothing, and input normalisation before inference"
+    },
+    {
+      "mitigation_id": "MIT-088",
+      "description": "Conduct regular adversarial robustness evaluations using benchmark attack suites (FGSM, PGD, C&W) as part of the model evaluation lifecycle"
+    },
+    {
+      "mitigation_id": "MIT-089",
+      "description": "Apply ensemble methods — aggregating predictions from multiple models reduces the reliability of single-model adversarial examples"
+    },
+    {
+      "mitigation_id": "MIT-090",
+      "description": "Implement and enforce usage policies and terms of service with automated detection of policy violations"
+    },
+    {
+      "mitigation_id": "MIT-091",
+      "description": "Apply rate limiting, CAPTCHA challenges, and account verification to impede automated bulk abuse"
+    },
+    {
+      "mitigation_id": "MIT-092",
+      "description": "Monitor generated outputs for anomalous content patterns indicative of fraud, disinformation, or policy violations"
+    },
+    {
+      "mitigation_id": "MIT-093",
+      "description": "Use content classifiers and output safety filters tuned to the product's abuse risk profile"
+    },
+    {
+      "mitigation_id": "MIT-094",
+      "description": "Implement account-level abuse scoring and graduated response (throttling, suspension) for accounts exhibiting suspicious usage patterns"
+    },
+    {
+      "mitigation_id": "MIT-095",
+      "description": "Enforce a clear privilege hierarchy in the system prompt that explicitly instructs the model to ignore user-supplied override attempts"
+    },
+    {
+      "mitigation_id": "MIT-096",
+      "description": "Apply semantic input filtering and intent classification to detect and block known injection patterns before model inference"
+    },
+    {
+      "mitigation_id": "MIT-097",
+      "description": "Implement strict output validation to detect and suppress model responses that indicate a successful injection"
+    },
+    {
+      "mitigation_id": "MIT-098",
+      "description": "Conduct regular red-team exercises simulating direct injection attacks including role-play, delimiter injection, and jailbreak variants"
+    },
+    {
+      "mitigation_id": "MIT-099",
+      "description": "Use fine-tuned or RLHF-trained models with explicit resistance to direct override instructions"
+    },
+    {
+      "mitigation_id": "MIT-100",
+      "description": "Sanitise and validate all externally retrieved content before inclusion in the model context — strip or escape instruction-like patterns"
+    },
+    {
+      "mitigation_id": "MIT-101",
+      "description": "Treat all retrieved documents, tool outputs, and web content as untrusted data, never as instructions"
+    },
+    {
+      "mitigation_id": "MIT-102",
+      "description": "Implement content provenance tracking so the origin of every context fragment is known and auditable"
+    },
+    {
+      "mitigation_id": "MIT-103",
+      "description": "Sandbox agentic workflow execution to prevent injected instructions from reaching privileged tool invocations"
+    },
+    {
+      "mitigation_id": "MIT-104",
+      "description": "Apply content-aware filtering tuned specifically to detect hidden instructions in retrieved content (markup, invisible text, encoded payloads)"
+    },
+    {
+      "mitigation_id": "MIT-105",
+      "description": "Research confirms that RAG and fine-tuning alone do not fully mitigate indirect injection — layer additional controls accordingly"
+    },
+    {
+      "mitigation_id": "MIT-106",
+      "description": "Document the organisation's mission, critical business objectives, and key dependencies in a cybersecurity context statement reviewed at least annually"
+    },
+    {
+      "mitigation_id": "MIT-107",
+      "description": "Identify and catalogue applicable legal, regulatory, and contractual cybersecurity obligations and map them to internal controls"
+    },
+    {
+      "mitigation_id": "MIT-108",
+      "description": "Engage senior leadership and key stakeholders to surface and record cybersecurity risk expectations and constraints"
+    },
+    {
+      "mitigation_id": "MIT-109",
+      "description": "Conduct periodic reviews of organisational context to capture changes in mission, operating environment, or regulatory requirements"
+    },
+    {
+      "mitigation_id": "MIT-110",
+      "description": "Establish cybersecurity KPIs and KRIs reported to senior leadership on a defined cadence (monthly/quarterly)"
+    },
+    {
+      "mitigation_id": "MIT-111",
+      "description": "Conduct periodic board-level or executive cybersecurity programme reviews against stated strategy and risk appetite"
+    },
+    {
+      "mitigation_id": "MIT-112",
+      "description": "Feed results of audits, assessments, and incident post-mortems into strategy adjustment cycles"
+    },
+    {
+      "mitigation_id": "MIT-113",
+      "description": "Define escalation thresholds that trigger formal leadership review when risk exposure exceeds agreed tolerance"
+    },
+    {
+      "mitigation_id": "MIT-114",
+      "description": "Define and document explicit risk tolerance and appetite statements endorsed by executive leadership"
+    },
+    {
+      "mitigation_id": "MIT-115",
+      "description": "Establish risk prioritisation criteria aligned to business impact, likelihood, and regulatory requirements"
+    },
+    {
+      "mitigation_id": "MIT-116",
+      "description": "Communicate risk strategy across business units and embed it in departmental planning processes"
+    },
+    {
+      "mitigation_id": "MIT-117",
+      "description": "Review and update the risk management strategy at least annually or following material changes to the threat landscape or business environment"
+    },
+    {
+      "mitigation_id": "MIT-118",
+      "description": "Define a cybersecurity RACI matrix covering all key risk management, response, and oversight activities"
+    },
+    {
+      "mitigation_id": "MIT-119",
+      "description": "Establish formal accountability mechanisms (performance objectives, audit findings) linked to cybersecurity responsibilities"
+    },
+    {
+      "mitigation_id": "MIT-120",
+      "description": "Communicate role assignments and authority levels to all affected personnel through onboarding and periodic refresh"
+    },
+    {
+      "mitigation_id": "MIT-121",
+      "description": "Review and update role definitions following organisational restructuring, system changes, or significant incidents"
+    },
+    {
+      "mitigation_id": "MIT-122",
+      "description": "Include cybersecurity requirements and right-to-audit clauses in all supplier and partner contracts"
+    },
+    {
+      "mitigation_id": "MIT-123",
+      "description": "Conduct risk-tiered supplier assessments before onboarding and on a defined periodic basis"
+    },
+    {
+      "mitigation_id": "MIT-124",
+      "description": "Maintain an approved supplier register and monitor for changes in supplier security posture"
+    },
+    {
+      "mitigation_id": "MIT-125",
+      "description": "Establish incident notification requirements for suppliers and define escalation paths for supply chain security events"
+    },
+    {
+      "mitigation_id": "MIT-126",
+      "description": "Maintain a comprehensive, up-to-date asset inventory covering hardware, software, data, services, and personnel with ownership and criticality classification"
+    },
+    {
+      "mitigation_id": "MIT-127",
+      "description": "Perform regular automated discovery scans to detect unmanaged or shadow assets"
+    },
+    {
+      "mitigation_id": "MIT-128",
+      "description": "Classify assets by criticality and sensitivity to inform prioritised protection and monitoring decisions"
+    },
+    {
+      "mitigation_id": "MIT-129",
+      "description": "Integrate asset inventory with vulnerability management and configuration management processes for consistent lifecycle coverage"
+    },
+    {
+      "mitigation_id": "MIT-130",
+      "description": "Conduct structured post-incident and post-exercise reviews (lessons-learned sessions) with documented action items and owners"
+    },
+    {
+      "mitigation_id": "MIT-131",
+      "description": "Integrate improvement actions into planning cycles with tracked completion timelines and accountability"
+    },
+    {
+      "mitigation_id": "MIT-132",
+      "description": "Perform periodic cybersecurity capability maturity assessments (e.g., against CSF tiers) to identify systematic gaps"
+    },
+    {
+      "mitigation_id": "MIT-133",
+      "description": "Establish a continuous improvement register that captures findings from assessments, audits, red-team exercises, and threat intelligence"
+    },
+    {
+      "mitigation_id": "MIT-134",
+      "description": "Conduct structured threat modelling and vulnerability assessments on a risk-tiered schedule for all critical systems"
+    },
+    {
+      "mitigation_id": "MIT-135",
+      "description": "Integrate current threat intelligence feeds to inform likelihood and impact ratings in risk assessments"
+    },
+    {
+      "mitigation_id": "MIT-136",
+      "description": "Prioritise risks by combined likelihood and business impact and communicate prioritised risk registers to decision-makers"
+    },
+    {
+      "mitigation_id": "MIT-137",
+      "description": "Review and update risk assessments following significant changes to the environment, threat landscape, or asset inventory"
+    },
+    {
+      "mitigation_id": "MIT-138",
+      "description": "Implement phishing-resistant multi-factor authentication (FIDO2 passkeys, certificate-based authentication) for all users, especially privileged accounts"
+    },
+    {
+      "mitigation_id": "MIT-139",
+      "description": "Enforce least-privilege access and separation of duties through RBAC or ABAC policies reviewed on a defined cycle"
+    },
+    {
+      "mitigation_id": "MIT-140",
+      "description": "Manage the full identity lifecycle — provisioning, access reviews, and timely de-provisioning — for all human and non-human identities"
+    },
+    {
+      "mitigation_id": "MIT-141",
+      "description": "Adopt industry-standard protocols (SAML 2.0, OAuth 2.0, OpenID Connect) and encrypt identity assertion channels (TLS 1.2+)"
+    },
+    {
+      "mitigation_id": "MIT-142",
+      "description": "Log and monitor authentication events for anomalies (failed attempts, unusual hours, new locations) and integrate with SIEM"
+    },
+    {
+      "mitigation_id": "MIT-143",
+      "description": "Implement network segmentation and micro-segmentation to contain the blast radius of breaches"
+    },
+    {
+      "mitigation_id": "MIT-144",
+      "description": "Deploy redundant system components and failover mechanisms for critical services to maintain availability"
+    },
+    {
+      "mitigation_id": "MIT-145",
+      "description": "Enforce regular backup schedules with off-site or air-gapped copies and test restoration procedures periodically"
+    },
+    {
+      "mitigation_id": "MIT-146",
+      "description": "Conduct architecture reviews against security design principles (zero trust, defence in depth) on a defined cadence"
+    },
+    {
+      "mitigation_id": "MIT-147",
+      "description": "Maintain and exercise resilience playbooks covering scenarios for system failure, ransomware, and DDoS"
+    },
+    {
+      "mitigation_id": "MIT-148",
+      "description": "Define and enforce hardening baselines for all platform types (OS, containers, cloud services) and validate compliance continuously"
+    },
+    {
+      "mitigation_id": "MIT-149",
+      "description": "Implement a risk-tiered patch management programme with defined SLAs for critical vulnerabilities"
+    },
+    {
+      "mitigation_id": "MIT-150",
+      "description": "Apply configuration management tooling (IaC, CSPM) to detect and remediate configuration drift"
+    },
+    {
+      "mitigation_id": "MIT-151",
+      "description": "Embed security requirements in the secure software development lifecycle (SSDLC) including code review, SAST, DAST, and dependency scanning"
+    },
+    {
+      "mitigation_id": "MIT-152",
+      "description": "Deploy SIEM with correlation rules to aggregate and analyse events from heterogeneous sources and surface high-fidelity alerts"
+    },
+    {
+      "mitigation_id": "MIT-153",
+      "description": "Define incident categorisation thresholds that trigger automated escalation to triage and response teams"
+    },
+    {
+      "mitigation_id": "MIT-154",
+      "description": "Integrate threat intelligence IOCs into detection rules to improve event contextualisation"
+    },
+    {
+      "mitigation_id": "MIT-155",
+      "description": "Conduct regular tuning of detection logic to reduce false positives and sharpen signal-to-noise ratio"
+    },
+    {
+      "mitigation_id": "MIT-156",
+      "description": "Implement automated triage playbooks for common event patterns to accelerate analyst response"
+    },
+    {
+      "mitigation_id": "MIT-157",
+      "description": "Deploy network traffic analysis (NTA) and intrusion detection systems (IDS/IPS) across perimeter and internal network segments"
+    },
+    {
+      "mitigation_id": "MIT-158",
+      "description": "Collect endpoint telemetry via EDR agents to enable host-level behavioural detection"
+    },
+    {
+      "mitigation_id": "MIT-159",
+      "description": "Centralise log collection from all asset types into a SIEM with sufficient retention for forensic investigation"
+    },
+    {
+      "mitigation_id": "MIT-160",
+      "description": "Implement UEBA to baseline normal behaviour and detect anomalous identity and data access patterns"
+    },
+    {
+      "mitigation_id": "MIT-161",
+      "description": "Run continuous vulnerability scans against the asset inventory and prioritise remediation based on exploitability and criticality"
+    },
+    {
+      "mitigation_id": "MIT-162",
+      "description": "Develop and maintain an incident communication plan covering internal escalation paths and external notification obligations"
+    },
+    {
+      "mitigation_id": "MIT-163",
+      "description": "Define breach notification timelines and responsibilities aligned to applicable regulatory requirements (e.g., GDPR 72-hour rule)"
+    },
+    {
+      "mitigation_id": "MIT-164",
+      "description": "Establish pre-approved communication templates for common incident scenarios to reduce response latency"
+    },
+    {
+      "mitigation_id": "MIT-165",
+      "description": "Participate in relevant ISAC or sector threat-sharing communities to enable voluntary intelligence sharing during incidents"
+    },
+    {
+      "mitigation_id": "MIT-166",
+      "description": "Test communication procedures through tabletop exercises that simulate regulatory notification and executive briefing scenarios"
+    },
+    {
+      "mitigation_id": "MIT-167",
+      "description": "Maintain a documented incident response plan with defined roles, escalation thresholds, and playbooks for common incident types"
+    },
+    {
+      "mitigation_id": "MIT-168",
+      "description": "Conduct at least annual incident response exercises (tabletop and live-fire) to validate plan effectiveness and team readiness"
+    },
+    {
+      "mitigation_id": "MIT-169",
+      "description": "Define and enforce evidence preservation procedures from the first moment of incident detection to support forensic investigation"
+    },
+    {
+      "mitigation_id": "MIT-170",
+      "description": "Establish containment decision criteria for isolating affected systems without unnecessarily disrupting operations"
+    },
+    {
+      "mitigation_id": "MIT-171",
+      "description": "Define clear handoff criteria and procedures between the response and recovery phases to ensure continuity"
+    }
+  ],
+  "codes": [
+    {
+      "code": "LLM01",
+      "name": "Prompt Injection",
+      "framework_id": "OWASP_LLM_2025",
+      "framework_name": "OWASP Top 10 for LLM Applications 2025",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 1,
+      "description": "A malicious instruction delivered directly via user input (direct injection) or indirectly via a retrieved document, tool output, web page, or other external content (indirect injection) overrides the intended behaviour of the LLM, allowing attackers to manipulate outputs, exfiltrate data, or cause the model to take unintended actions.",
+      "risk_context": "Application component risk",
+      "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+      "mitigations": [
+        "MIT-001",
+        "MIT-002",
+        "MIT-003",
+        "MIT-004",
+        "MIT-005",
+        "MIT-006"
+      ]
+    },
+    {
+      "code": "LLM02",
+      "name": "Sensitive Information Disclosure",
+      "framework_id": "OWASP_LLM_2025",
+      "framework_name": "OWASP Top 10 for LLM Applications 2025",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 2,
+      "description": "LLMs can unintentionally expose confidential information, proprietary algorithms, private data, or system prompts through their responses. This includes training data memorisation, system prompt leakage, and inadvertent disclosure of PII or business-sensitive content.",
+      "risk_context": "Application component risk",
+      "url": "https://genai.owasp.org/llmrisk/llm02-sensitive-information-disclosure/",
+      "mitigations": [
+        "MIT-007",
+        "MIT-008",
+        "MIT-009",
+        "MIT-010",
+        "MIT-011",
+        "MIT-012"
+      ]
+    },
+    {
+      "code": "LLM05",
+      "name": "Improper Output Handling",
+      "framework_id": "OWASP_LLM_2025",
+      "framework_name": "OWASP Top 10 for LLM Applications 2025",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 5,
+      "description": "Failures in downstream validation and sanitisation of LLM-generated content before it is passed to other components or rendered to users. Untreated outputs can introduce cross-site scripting (XSS), code injection, or server-side request forgery (SSRF) when consumed by interpreters, browsers, or APIs.",
+      "risk_context": "Application component risk",
+      "url": "https://genai.owasp.org/llmrisk/llm05-improper-output-handling/",
+      "mitigations": [
+        "MIT-013",
+        "MIT-014",
+        "MIT-015",
+        "MIT-016",
+        "MIT-017"
+      ]
+    },
+    {
+      "code": "LLM06",
+      "name": "Excessive Agency",
+      "framework_id": "OWASP_LLM_2025",
+      "framework_name": "OWASP Top 10 for LLM Applications 2025",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 6,
+      "description": "LLM-based systems are granted excessive permissions, functionality, or autonomy beyond what the task requires, enabling harmful or unintended actions. This differs from Improper Output Handling in that the model actively takes action—writing files, calling APIs, sending messages—rather than simply producing output.",
+      "risk_context": "Application component risk",
+      "url": "https://genai.owasp.org/llmrisk/llm06-excessive-agency/",
+      "mitigations": [
+        "MIT-018",
+        "MIT-019",
+        "MIT-020",
+        "MIT-021",
+        "MIT-022"
+      ]
+    },
+    {
+      "code": "LLM08",
+      "name": "Vector and Embedding Weaknesses",
+      "framework_id": "OWASP_LLM_2025",
+      "framework_name": "OWASP Top 10 for LLM Applications 2025",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 8,
+      "description": "Security weaknesses in vector databases and embedding pipelines used in Retrieval-Augmented Generation (RAG) and semantic search architectures. Attackers can poison embedding stores, manipulate similarity search results, or extract sensitive information encoded in embedding spaces.",
+      "risk_context": "Application component risk",
+      "url": "https://genai.owasp.org/llmrisk/llm08-vector-and-embedding-weaknesses/",
+      "mitigations": [
+        "MIT-023",
+        "MIT-024",
+        "MIT-025",
+        "MIT-026",
+        "MIT-027"
+      ]
+    },
+    {
+      "code": "ASI01",
+      "name": "Agent Goal Hijack",
+      "framework_id": "OWASP_AGENTIC_2026",
+      "framework_name": "OWASP Top 10 for Agentic Applications 2026",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 1,
+      "description": "Attackers manipulate an autonomous agent's objectives, task selection, or decision pathways so that it pursues goals other than those intended by the operator. Attack vectors include prompt-based manipulation, deceptive tool outputs, malicious artefacts, forged agent-to-agent messages, and poisoned external data. Because agents cannot reliably distinguish instructions from content, any processed input is a potential attack surface.",
+      "risk_context": "Autonomous AI system risk",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
+      "mitigations": [
+        "MIT-028",
+        "MIT-029",
+        "MIT-030",
+        "MIT-031",
+        "MIT-032",
+        "MIT-033"
+      ]
+    },
+    {
+      "code": "ASI02",
+      "name": "Tool Misuse and Exploitation",
+      "framework_id": "OWASP_AGENTIC_2026",
+      "framework_name": "OWASP Top 10 for Agentic Applications 2026",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 2,
+      "description": "Legitimate tools granted to an agent are misused through unsafe chaining, ambiguous or manipulated instructions, or tampered tool outputs. Unlike identity abuse, the tool access itself is authorised; the harm arises from how tools are invoked or how their outputs are consumed, enabling unintended data access, privilege escalation, or destructive side effects.",
+      "risk_context": "Autonomous AI system risk",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
+      "mitigations": [
+        "MIT-034",
+        "MIT-035",
+        "MIT-036",
+        "MIT-037",
+        "MIT-038",
+        "MIT-039"
+      ]
+    },
+    {
+      "code": "ASI03",
+      "name": "Identity and Privilege Abuse",
+      "framework_id": "OWASP_AGENTIC_2026",
+      "framework_name": "OWASP Top 10 for Agentic Applications 2026",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 3,
+      "description": "Exploitation of delegated trust, inherited credentials, or role chains—including API keys, OAuth tokens, and delegated sessions—to gain unauthorised access or perform privileged actions. An agent's identity encompasses all authentication material presented to it, and compromise of any credential effectively compromises the agent's full permission scope.",
+      "risk_context": "Autonomous AI system risk",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
+      "mitigations": [
+        "MIT-040",
+        "MIT-041",
+        "MIT-042",
+        "MIT-043",
+        "MIT-044",
+        "MIT-045"
+      ]
+    },
+    {
+      "code": "ASI04",
+      "name": "Agentic Supply Chain Vulnerabilities",
+      "framework_id": "OWASP_AGENTIC_2026",
+      "framework_name": "OWASP Top 10 for Agentic Applications 2026",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 4,
+      "description": "Compromised or tampered third-party agents, tools, plugins, registries, or update channels introduced into an agentic pipeline. Distinctive to agentic systems is dynamic runtime composition, where agents discover and integrate new components during execution, expanding the attack surface beyond pre-deployment supply chain controls.",
+      "risk_context": "Autonomous AI system risk",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
+      "mitigations": [
+        "MIT-046",
+        "MIT-047",
+        "MIT-048",
+        "MIT-049",
+        "MIT-050",
+        "MIT-051"
+      ]
+    },
+    {
+      "code": "ASI06",
+      "name": "Memory and Context Poisoning",
+      "framework_id": "OWASP_AGENTIC_2026",
+      "framework_name": "OWASP Top 10 for Agentic Applications 2026",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 6,
+      "description": "Corruption of stored context including long-term memory stores, session state, embeddings, or RAG knowledge bases to bias an agent's future reasoning and actions. Poisoning effects persist across sessions and reshape behaviour long after the initial compromise, making detection and attribution difficult.",
+      "risk_context": "Autonomous AI system risk",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
+      "mitigations": [
+        "MIT-052",
+        "MIT-053",
+        "MIT-054",
+        "MIT-055",
+        "MIT-056",
+        "MIT-057"
+      ]
+    },
+    {
+      "code": "ASI08",
+      "name": "Cascading Failures",
+      "framework_id": "OWASP_AGENTIC_2026",
+      "framework_name": "OWASP Top 10 for Agentic Applications 2026",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 8,
+      "description": "Propagation and amplification of faults across interconnected agents, sessions, or workflows resulting in systemic impact beyond the original breach. Observable symptoms include rapid fan-out where one faulty decision triggers many downstream tasks, cross-domain or cross-tenant spread, oscillating retry loops between agents, and downstream queue storms. Applies when a defect—originating from a tainted dependency, poisoned memory, or other root cause—spreads with measurable fan-out.",
+      "risk_context": "Autonomous AI system risk",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
+      "mitigations": [
+        "MIT-058",
+        "MIT-059",
+        "MIT-060",
+        "MIT-061",
+        "MIT-062",
+        "MIT-063"
+      ]
+    },
+    {
+      "code": "ASI10",
+      "name": "Rogue Agents",
+      "framework_id": "OWASP_AGENTIC_2026",
+      "framework_name": "OWASP Top 10 for Agentic Applications 2026",
+      "function": null,
+      "category": null,
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": 10,
+      "description": "Malicious or compromised agents that appear compliant on the surface while secretly pursuing hidden goals or hijacking workflows. Rogue agents drift or are compromised in ways that cause harmful behaviour beyond their intended scope, potentially subverting the multi-agent orchestration layer.",
+      "risk_context": "Autonomous AI system risk",
+      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/",
+      "mitigations": [
+        "MIT-064",
+        "MIT-065",
+        "MIT-066",
+        "MIT-067",
+        "MIT-068",
+        "MIT-069"
+      ]
+    },
+    {
+      "code": "AML.T0000",
+      "name": "ML Model Reconnaissance",
+      "framework_id": "MITRE_ATLAS",
+      "framework_name": "MITRE ATLAS",
+      "function": null,
+      "category": "Reconnaissance",
+      "subcategory": null,
+      "tactic": "Reconnaissance",
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Adversaries gather information about a target ML model or system before mounting further attacks. Reconnaissance activities may include searching for publicly available research materials, model cards, API documentation, and deployment artefacts that reveal model architecture, training data provenance, or operational characteristics.",
+      "risk_context": "Adversarial ML technique",
+      "url": "https://atlas.mitre.org/techniques/AML.T0000",
+      "mitigations": [
+        "MIT-070",
+        "MIT-071",
+        "MIT-072",
+        "MIT-073",
+        "MIT-074"
+      ]
+    },
+    {
+      "code": "AML.T0018",
+      "name": "Backdoor ML Model",
+      "framework_id": "MITRE_ATLAS",
+      "framework_name": "MITRE ATLAS",
+      "function": null,
+      "category": "ML Attack Staging",
+      "subcategory": null,
+      "tactic": "ML Attack Staging",
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Adversaries insert hidden backdoors into a model during training or fine-tuning, causing the model to behave normally on clean inputs while producing attacker-controlled outputs when a specific trigger pattern is present. Backdoored models are difficult to detect through standard testing and can persist through subsequent fine-tuning rounds.",
+      "risk_context": "Adversarial ML technique",
+      "url": "https://atlas.mitre.org/techniques/AML.T0018",
+      "mitigations": [
+        "MIT-075",
+        "MIT-076",
+        "MIT-077",
+        "MIT-078",
+        "MIT-079"
+      ]
+    },
+    {
+      "code": "AML.T0040",
+      "name": "ML Inference API Access",
+      "framework_id": "MITRE_ATLAS",
+      "framework_name": "MITRE ATLAS",
+      "function": null,
+      "category": "Resource Development",
+      "subcategory": null,
+      "tactic": "Resource Development",
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Adversaries gain direct access to a model's inference API to run unauthorised queries, probe model behaviour, perform model extraction through repeated queries, or abuse compute resources. API access may be obtained through credential theft, misconfigured access controls, or trial/free-tier accounts.",
+      "risk_context": "Adversarial ML technique",
+      "url": "https://atlas.mitre.org/techniques/AML.T0040",
+      "mitigations": [
+        "MIT-080",
+        "MIT-081",
+        "MIT-082",
+        "MIT-083",
+        "MIT-084"
+      ]
+    },
+    {
+      "code": "AML.T0043",
+      "name": "Craft Adversarial Data",
+      "framework_id": "MITRE_ATLAS",
+      "framework_name": "MITRE ATLAS",
+      "function": null,
+      "category": "ML Attack Staging",
+      "subcategory": null,
+      "tactic": "ML Attack Staging",
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Adversaries deliberately craft inputs designed to cause a target ML model to produce incorrect, harmful, or attacker-specified outputs. Adversarial examples exploit the geometry of the model's decision boundary and may be imperceptible to human reviewers while reliably misleading the model.",
+      "risk_context": "Adversarial ML technique",
+      "url": "https://atlas.mitre.org/techniques/AML.T0043",
+      "mitigations": [
+        "MIT-085",
+        "MIT-086",
+        "MIT-087",
+        "MIT-088",
+        "MIT-089"
+      ]
+    },
+    {
+      "code": "AML.T0047",
+      "name": "ML-Enabled Product Abuse",
+      "framework_id": "MITRE_ATLAS",
+      "framework_name": "MITRE ATLAS",
+      "function": null,
+      "category": "Impact",
+      "subcategory": null,
+      "tactic": "Impact",
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Adversaries abuse ML-powered products or services for purposes beyond their intended use, such as automating fraud, generating disinformation at scale, or circumventing safety controls. The model's generative or classification capabilities are weaponised as a service.",
+      "risk_context": "Adversarial ML technique",
+      "url": "https://atlas.mitre.org/techniques/AML.T0047",
+      "mitigations": [
+        "MIT-090",
+        "MIT-091",
+        "MIT-092",
+        "MIT-093",
+        "MIT-094"
+      ]
+    },
+    {
+      "code": "AML.T0051.000",
+      "name": "LLM Prompt Injection - Direct",
+      "framework_id": "MITRE_ATLAS",
+      "framework_name": "MITRE ATLAS",
+      "function": null,
+      "category": "Execution",
+      "subcategory": null,
+      "tactic": "Execution",
+      "technique_parent": "AML.T0051",
+      "is_subtechnique": true,
+      "rank": null,
+      "description": "Malicious instructions are introduced directly through the user-facing input channel of an LLM-enabled application. The attacker controls the prompt itself, using it to override system instructions, extract system prompts, bypass safety filters, or cause the model to perform unintended actions. Requires attacker access to the primary input interface.",
+      "risk_context": "Adversarial ML technique",
+      "url": "https://atlas.mitre.org/techniques/AML.T0051.000",
+      "mitigations": [
+        "MIT-095",
+        "MIT-096",
+        "MIT-097",
+        "MIT-098",
+        "MIT-099"
+      ]
+    },
+    {
+      "code": "AML.T0051.001",
+      "name": "LLM Prompt Injection - Indirect",
+      "framework_id": "MITRE_ATLAS",
+      "framework_name": "MITRE ATLAS",
+      "function": null,
+      "category": "Execution",
+      "subcategory": null,
+      "tactic": "Execution",
+      "technique_parent": "AML.T0051",
+      "is_subtechnique": true,
+      "rank": null,
+      "description": "Malicious instructions are embedded in external content—such as retrieved documents, web pages, tool responses, emails, or database records—that the LLM processes as part of its context. When the model reads and acts on this content, the hidden instructions execute without direct attacker access to the input interface. Particularly dangerous in RAG and agentic pipelines.",
+      "risk_context": "Adversarial ML technique",
+      "url": "https://atlas.mitre.org/techniques/AML.T0051.001",
+      "mitigations": [
+        "MIT-100",
+        "MIT-101",
+        "MIT-102",
+        "MIT-103",
+        "MIT-104",
+        "MIT-105"
+      ]
+    },
+    {
+      "code": "GV.OC",
+      "name": "Organizational Context",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Govern",
+      "category": "GV.OC",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "The circumstances surrounding the organisation's cybersecurity risk management decisions are understood. This includes the organisation's mission, stakeholder expectations, dependencies, and applicable legal, regulatory, and contractual requirements that shape the cybersecurity risk landscape.",
+      "risk_context": "Governance",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/gv/gv-oc/",
+      "mitigations": [
+        "MIT-106",
+        "MIT-107",
+        "MIT-108",
+        "MIT-109"
+      ]
+    },
+    {
+      "code": "GV.OV",
+      "name": "Oversight",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Govern",
+      "category": "GV.OV",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Results of risk management activities and the performance of cybersecurity practices are used to inform and adjust strategy, objectives, and risk appetite. Senior leadership reviews cybersecurity outcomes to ensure oversight responsibilities are met and that the programme remains aligned with organisational priorities.",
+      "risk_context": "Governance",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/gv/gv-ov/",
+      "mitigations": [
+        "MIT-110",
+        "MIT-111",
+        "MIT-112",
+        "MIT-113"
+      ]
+    },
+    {
+      "code": "GV.RM",
+      "name": "Risk Management Strategy",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Govern",
+      "category": "GV.RM",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Priorities, constraints, risk tolerance and appetite statements, and assumptions that support organisational cybersecurity risk decisions are established, communicated, and monitored. Provides the strategic context within which all other risk management activities operate.",
+      "risk_context": "Governance",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/gv/gv-rm/",
+      "mitigations": [
+        "MIT-114",
+        "MIT-115",
+        "MIT-116",
+        "MIT-117"
+      ]
+    },
+    {
+      "code": "GV.RR",
+      "name": "Roles, Responsibilities, and Authorities",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Govern",
+      "category": "GV.RR",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Cybersecurity roles, responsibilities, and authorities for accountability, performance assessment, and continuous improvement are established and communicated across the organisation. Clear ownership ensures that risk management decisions are made by appropriately empowered individuals.",
+      "risk_context": "Governance",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/gv/gv-rr/",
+      "mitigations": [
+        "MIT-118",
+        "MIT-119",
+        "MIT-120",
+        "MIT-121"
+      ]
+    },
+    {
+      "code": "GV.SC",
+      "name": "Supply Chain Risk Management",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Govern",
+      "category": "GV.SC",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Cybersecurity risks posed by suppliers, partners, and other third parties in the supply chain are identified, assessed, prioritised, and managed through organisation-wide policies, processes, and procedures that are approved and monitored.",
+      "risk_context": "Governance",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/gv/gv-sc/",
+      "mitigations": [
+        "MIT-122",
+        "MIT-123",
+        "MIT-124",
+        "MIT-125"
+      ]
+    },
+    {
+      "code": "ID.AM",
+      "name": "Asset Management",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Identify",
+      "category": "ID.AM",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Assets including data, hardware, software, systems, facilities, services, and people that enable the organisation to achieve its objectives are identified and managed consistent with their relative importance to organisational objectives and the organisation's risk strategy.",
+      "risk_context": "Identification",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/id/id-am/",
+      "mitigations": [
+        "MIT-126",
+        "MIT-127",
+        "MIT-128",
+        "MIT-129"
+      ]
+    },
+    {
+      "code": "ID.IM",
+      "name": "Improvement",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Identify",
+      "category": "ID.IM",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Improvements to organisational cybersecurity risk management processes, procedures, and activities are identified across all CSF Functions. Lessons learned from assessments, incidents, and exercises are incorporated into updated plans and controls.",
+      "risk_context": "Identification",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/id/id-im/",
+      "mitigations": [
+        "MIT-130",
+        "MIT-131",
+        "MIT-132",
+        "MIT-133"
+      ]
+    },
+    {
+      "code": "ID.RA",
+      "name": "Risk Assessment",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Identify",
+      "category": "ID.RA",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "The cybersecurity risks to organisational operations and assets, individuals, and other organisations are identified, analysed, prioritised, and communicated, informed by threat intelligence and vulnerability data, to enable informed risk response decisions.",
+      "risk_context": "Identification",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/id/id-ra/",
+      "mitigations": [
+        "MIT-134",
+        "MIT-135",
+        "MIT-136",
+        "MIT-137"
+      ]
+    },
+    {
+      "code": "PR.AA",
+      "name": "Identity Management, Authentication, and Access Control",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Protect",
+      "category": "PR.AA",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Access to physical and logical assets is limited to authorised users, services, and hardware and is managed commensurate with the assessed risk of unauthorised access. Covers identity lifecycle management, multi-factor authentication, least-privilege enforcement, and access reviews.",
+      "risk_context": "Protection",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/pr/pr-aa/",
+      "mitigations": [
+        "MIT-138",
+        "MIT-139",
+        "MIT-140",
+        "MIT-141",
+        "MIT-142"
+      ]
+    },
+    {
+      "code": "PR.IR",
+      "name": "Technology Infrastructure Resilience",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Protect",
+      "category": "PR.IR",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Security architectures are managed in accordance with the organisation's risk strategy to protect the confidentiality, integrity, and availability of assets and maintain organisational resilience. Includes network segmentation, redundancy, backup, and recovery-readiness controls.",
+      "risk_context": "Protection",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/pr/pr-ir/",
+      "mitigations": [
+        "MIT-143",
+        "MIT-144",
+        "MIT-145",
+        "MIT-146",
+        "MIT-147"
+      ]
+    },
+    {
+      "code": "PR.PS",
+      "name": "Platform Security",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Protect",
+      "category": "PR.PS",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Hardware, software, and services of physical and virtual platforms are managed consistently with the organisation's risk strategy to protect their confidentiality, integrity, and availability. Covers hardening baselines, patch management, configuration management, and secure software development practices.",
+      "risk_context": "Protection",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/pr/pr-ps/",
+      "mitigations": [
+        "MIT-148",
+        "MIT-149",
+        "MIT-150",
+        "MIT-151"
+      ]
+    },
+    {
+      "code": "DE.AE",
+      "name": "Adverse Event Analysis",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Detect",
+      "category": "DE.AE",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Anomalies, indicators of compromise, and other potentially adverse cybersecurity events are analysed to characterise the events and detect cybersecurity incidents. Events are correlated, categorised, and escalated for triage when they meet incident thresholds.",
+      "risk_context": "Detection",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/de/de-ae/",
+      "mitigations": [
+        "MIT-152",
+        "MIT-153",
+        "MIT-154",
+        "MIT-155",
+        "MIT-156"
+      ]
+    },
+    {
+      "code": "DE.CM",
+      "name": "Continuous Monitoring",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Detect",
+      "category": "DE.CM",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Assets are monitored to find anomalies, indicators of compromise, and other potentially adverse cybersecurity events. Covers network traffic monitoring, endpoint telemetry, log aggregation, user and entity behaviour analytics (UEBA), and vulnerability scanning.",
+      "risk_context": "Detection",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/de/de-cm/",
+      "mitigations": [
+        "MIT-157",
+        "MIT-158",
+        "MIT-159",
+        "MIT-160",
+        "MIT-161"
+      ]
+    },
+    {
+      "code": "RS.CO",
+      "name": "Incident Response Reporting and Communication",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Respond",
+      "category": "RS.CO",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Response activities are coordinated with internal and external stakeholders as required by laws, regulations, or policies. Includes mandatory breach notification, voluntary sharing with ISACs or regulatory bodies, and internal communication to leadership and affected teams during and after an incident.",
+      "risk_context": "Response",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/rs/rs-co/",
+      "mitigations": [
+        "MIT-162",
+        "MIT-163",
+        "MIT-164",
+        "MIT-165",
+        "MIT-166"
+      ]
+    },
+    {
+      "code": "RS.MA",
+      "name": "Incident Management",
+      "framework_id": "NIST_CSF_2",
+      "framework_name": "NIST CSF 2.0",
+      "function": "Respond",
+      "category": "RS.MA",
+      "subcategory": null,
+      "tactic": null,
+      "technique_parent": null,
+      "is_subtechnique": false,
+      "rank": null,
+      "description": "Responses to detected cybersecurity incidents are managed according to established plans and procedures. Covers incident categorisation, containment, eradication, evidence preservation, escalation, and the handoff to recovery activities.",
+      "risk_context": "Response",
+      "url": "https://csf.tools/reference/nist-cybersecurity-framework/v2-0/rs/rs-ma/",
+      "mitigations": [
+        "MIT-167",
+        "MIT-168",
+        "MIT-169",
+        "MIT-170",
+        "MIT-171"
+      ]
+    }
+  ]
+}

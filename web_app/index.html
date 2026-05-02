@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mythos Ready — AI Security Framework Explorer</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="#/" class="logo">
+        <span class="logo-hex">&#x2B22;</span>
+        <span class="logo-text">Mythos<span class="logo-accent">Ready</span></span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#/" class="nav-link">Home</a>
+        <a href="#/codes" class="nav-link">All Codes</a>
+        <a href="#/mitigations" class="nav-link">Mitigations</a>
+      </div>
+      <div class="nav-search">
+        <input type="search" id="global-search" placeholder="&#128269; Search codes &amp; risks..." class="search-input" autocomplete="off">
+      </div>
+    </nav>
+  </header>
+
+  <main id="app-root">
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading frameworks...</p>
+    </div>
+  </main>
+
+  <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div id="modal-content" class="modal-content">
+      <button id="modal-close" class="modal-close" aria-label="Close">&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-brand">&#x2B22; MythosReady</span>
+      <span class="footer-sep">|</span>
+      <span>OWASP LLM 2025 &nbsp;&middot;&nbsp; OWASP Agentic 2026 &nbsp;&middot;&nbsp; MITRE ATLAS &nbsp;&middot;&nbsp; NIST CSF 2.0</span>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
