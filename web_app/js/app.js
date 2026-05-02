@@ -254,7 +254,7 @@ const App = {
       <div class="hero">
         <div class="hero-inner">
           <div class="hero-badge">&#9679; v${d.schema_version} &nbsp;&#x2022;&nbsp; ${d.generated_date}</div>
-          <h1>AI Security<br><span>Framework Explorer</span></h1>
+          <h1>AI Security<br><span>Control Readiness</span></h1>
           <p>${d.description.split('.')[0]}.</p>
           <div class="stats-bar">
             <div class="stat"><div class="stat-num">${d.frameworks.length}</div><div class="stat-label">Frameworks</div></div>
@@ -264,19 +264,13 @@ const App = {
         </div>
       </div>
       <div class="page-section">
-        <div class="home-body">
-          <div class="home-main">
-            <div class="section-heading">
-              <h2>Security Frameworks</h2>
-              <span class="count">${d.frameworks.length}</span>
-            </div>
-            <div class="framework-grid">
-              ${d.frameworks.map(fw => this.renderFwCard(fw)).join('')}
-            </div>
-          </div>
-          <aside class="home-sidebar">
-            ${this.renderRiskWidget()}
-          </aside>
+        ${this.renderRiskPanel()}
+        <div class="section-heading">
+          <h2>Security Frameworks</h2>
+          <span class="count">${d.frameworks.length}</span>
+        </div>
+        <div class="framework-grid">
+          ${d.frameworks.map(fw => this.renderFwCard(fw)).join('')}
         </div>
         <div class="section-heading" style="margin-top:40px">
           <h2>Recent Codes</h2>
@@ -288,7 +282,53 @@ const App = {
       </div>`;
   },
 
-  // ── Risk widget ───────────────────────────────────────────────────────────
+  // ── Risk panel (full-width) ───────────────────────────────────────────────
+
+  renderRiskPanel() {
+    const counts = this.getRiskCounts();
+    const total = this.data.codes.length;
+    const assessed = total - counts['Not Assessed'];
+    const pct = Math.round((assessed / total) * 100);
+
+    const cards = RISK_LEVELS.map(level => {
+      const meta = RISK_META[level];
+      const count = counts[level];
+      return `
+        <a class="risk-panel-card ${meta.cls}" href="#/risk/${encodeURIComponent(level)}">
+          <span class="risk-dot ${meta.cls} risk-dot-lg"></span>
+          <span class="risk-card-count">${count}</span>
+          <span class="risk-card-label">${level}</span>
+          <span class="risk-card-sub">${count === 1 ? 'code' : 'codes'}</span>
+          <span class="risk-card-arrow">&#x2192;</span>
+        </a>`;
+    }).join('');
+
+    const resetBtn = assessed > 0
+      ? `<div class="risk-panel-footer">
+           <button class="risk-reset-btn" onclick="App.resetAllControls()">Reset all control assessments</button>
+         </div>`
+      : '';
+
+    return `
+      <div class="risk-panel">
+        <div class="risk-panel-header">
+          <div class="risk-panel-title-group">
+            <div class="risk-panel-title"><span class="risk-widget-icon">&#x26A0;</span> Risk Assessment</div>
+            <div class="risk-panel-sub">Derived from control implementation status</div>
+          </div>
+          <div class="risk-panel-progress-wrap">
+            <div class="risk-progress-bar">
+              <div class="risk-progress-fill" style="width:${pct}%"></div>
+            </div>
+            <span class="risk-progress-label">${assessed} / ${total} assessed</span>
+          </div>
+        </div>
+        <div class="risk-panel-cards">${cards}</div>
+        ${resetBtn}
+      </div>`;
+  },
+
+  // ── Risk widget (kept for other pages if needed) ──────────────────────────
 
   renderRiskWidget() {
     const counts = this.getRiskCounts();
