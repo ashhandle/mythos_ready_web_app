@@ -2,7 +2,7 @@
   "schema_version": "1.2.0",
   "source_document": "csamythosreadyv92",
   "generated_date": "2026-05-02",
-  "description": "Mythos Risk Register. Four source frameworks are represented: OWASP LLM Top 10 2025, OWASP Agentic Top 10 2026, MITRE ATLAS, and NIST CSF 2.0. Version 1.2.0 extracts mitigations into a deduplicated top-level registry; codes reference mitigations by mitigation_id.",
+  "description": "Mythos Risk Register",
   "frameworks": [
     {
       "framework_id": "OWASP_LLM_2025",

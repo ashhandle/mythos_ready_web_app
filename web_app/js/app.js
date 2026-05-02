@@ -194,6 +194,8 @@ const App = {
       this.data = await res.json();
       this.buildIndices();
       this.setupGlobalSearch();
+      const vEl = document.getElementById('nav-version');
+      if (vEl) vEl.textContent = `v${this.data.schema_version}`;
       window.addEventListener('hashchange', () => this.route());
       this.route();
     } catch (e) {
@@ -253,9 +255,8 @@ const App = {
     return `
       <div class="hero">
         <div class="hero-inner">
-          <div class="hero-badge">&#9679; v${d.schema_version} &nbsp;&#x2022;&nbsp; ${d.generated_date}</div>
           <h1>AI Security<br><span>Control Readiness</span></h1>
-          <p>${d.description.split('.')[0]}.</p>
+          <p>${d.description}</p>
           <div class="stats-bar">
             <div class="stat"><div class="stat-num">${d.frameworks.length}</div><div class="stat-label">Frameworks</div></div>
             <div class="stat"><div class="stat-num">${d.codes.length}</div><div class="stat-label">Risk Codes</div></div>

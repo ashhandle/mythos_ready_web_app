@@ -123,6 +123,19 @@ a:hover { text-decoration: underline; }
 
 .nav-search { flex: 1; max-width: 320px; margin-left: auto; }
 
+.nav-version {
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 3px 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .search-input {
   width: 100%;
   background: var(--bg-input);
