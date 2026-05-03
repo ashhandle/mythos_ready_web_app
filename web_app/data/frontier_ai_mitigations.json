@@ -1,0 +1,1162 @@
+{
+  "schema_version": "1.2.0",
+  "source_document": "csamythosreadyv92",
+  "generated_date": "2026-05-02",
+  "description": "FrontierAI Ready mitigations catalogue. Each mitigation is referenced by one or more risk codes across OWASP LLM Top 10 2025, OWASP Agentic Top 10 2026, MITRE ATLAS, and NIST CSF 2.0.",
+  "mitigations": [
+    {
+      "mitigation_id": "MIT-001",
+      "description": "Constrain model behaviour by defining a strict role in the system prompt and enforcing adherence to specific tasks using deterministic rules",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-002",
+      "description": "Segregate and clearly label external/untrusted content to minimise its influence on the active prompt",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-003",
+      "description": "Apply semantic input validation and output filters to detect and block potentially harmful content before and after model inference",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Effective",
+          "domain": "AIDR"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-004",
+      "description": "Implement privilege separation between user-controlled input channels and system instructions",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-005",
+      "description": "Conduct regular adversarial red-teaming and fuzz testing to evaluate model resilience to injection variants",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-006",
+      "description": "Monitor production inputs and outputs for anomalous instruction patterns and escalate detections for triage",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-007",
+      "description": "Apply PII detection and scrubbing to model inputs and outputs before storage or transmission",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-008",
+      "description": "Train users on safe LLM interaction practices including which data categories must not be submitted",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-009",
+      "description": "Publish and enforce transparent data-handling policies covering collection, retention, and deletion; provide opt-out from training data inclusion",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-010",
+      "description": "Apply adversarial robustness training to reduce model susceptibility to extraction prompts",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-011",
+      "description": "Enforce data minimisation in system prompt design — include only information the model strictly requires",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-012",
+      "description": "Restrict system prompt access so it cannot be directly retrieved by users through jailbreak or extraction prompts",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-013",
+      "description": "Treat all LLM-generated content as untrusted input to downstream components — apply context-appropriate encoding (HTML, SQL, shell) before use",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-014",
+      "description": "Implement output sanitisation aligned with OWASP secure coding practices prior to rendering or passing to interpreters",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-015",
+      "description": "Integrate SAST and DAST tooling in the development pipeline to detect output-handling vulnerabilities before deployment",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-016",
+      "description": "Validate and constrain output schemas where the LLM produces structured output (JSON, SQL, code) to enforce expected formats",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-017",
+      "description": "Sandbox code execution environments to limit blast radius when LLM-generated code is executed",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-018",
+      "description": "Apply the principle of least privilege — grant LLM extensions only the minimum permissions required for each specific task",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-019",
+      "description": "Require human-in-the-loop approval for high-impact or irreversible actions (sending messages, deleting records, making purchases)",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-020",
+      "description": "Implement rate limiting to restrict the number of actions an LLM extension can perform per timeframe, enabling detection before significant damage occurs",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-021",
+      "description": "Log and monitor all LLM-initiated actions on downstream systems for anomalous or unintended behaviour",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-022",
+      "description": "Scope tools and plugins to narrow, well-defined functions and avoid general-purpose capabilities where specific ones suffice",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-023",
+      "description": "Enforce RBAC and least-privilege access controls on vector stores and embedding repositories",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-024",
+      "description": "Maintain a centralised, governed model and embedding registry with access logging and integrity verification",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-025",
+      "description": "Validate and sanitise all documents before ingestion into the retrieval pipeline to prevent poisoning",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-026",
+      "description": "Monitor embedding stores for unexpected updates, anomalous query patterns, or high-similarity results from untrusted sources",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-027",
+      "description": "Segment sensitive embeddings into separate namespaces with stricter access controls to limit extraction blast radius",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-028",
+      "description": "Apply structured planning constraints that limit the scope of goals an agent can adopt at runtime",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-029",
+      "description": "Validate and label all external content before it enters the agent's context window — never treat retrieved content as instructions",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-030",
+      "description": "Enforce privilege separation between the agent's planning layer and its execution layer",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-031",
+      "description": "Implement anomaly detection on agent behaviour to identify goal drift from the original task specification",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-032",
+      "description": "Require human confirmation before the agent commits to irreversible or high-impact goal reorientation",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-033",
+      "description": "Use cryptographic verification for agent-to-agent messages to prevent forged orchestration instructions",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-034",
+      "description": "Apply strict tool permission scoping — each tool invocation should be authorised against a policy that checks the calling agent's identity and intent",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-035",
+      "description": "Execute tool calls within sandboxed environments with strict filesystem, network egress, and resource controls",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-036",
+      "description": "Validate all tool arguments before execution and reject invocations that fall outside the expected parameter envelope",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-037",
+      "description": "Treat all model-generated tool call outputs as untrusted data — validate before downstream consumption",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-038",
+      "description": "Log every tool invocation with full argument and response context for audit and anomaly detection",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-039",
+      "description": "Prohibit unsafe tool chaining patterns identified through threat modelling",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-040",
+      "description": "Issue ephemeral X.509 or SSH certificates scoped to specific tasks rather than static long-lived API keys",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-041",
+      "description": "Apply least-privilege credential scoping so each agent credential grants only the minimum permissions required",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-042",
+      "description": "Implement just-in-time (JIT) access provisioning with automatic expiry for elevated permissions",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Alternate Control"
+        },
+        {
+          "product": "Falcon Privileged Access",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-043",
+      "description": "Use attribute-based access control (ABAC) to tie agent authorisation to verified runtime context",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-044",
+      "description": "Monitor and alert on unexpected credential usage patterns such as access from new IP ranges or outside normal operating hours",
+      "falcon_modules": [
+        {
+          "product": "Falcon Identity Threat Protection",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-045",
+      "description": "Rotate credentials automatically and invalidate on task completion to minimise exposure window",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Alternate Control"
+        },
+        {
+          "product": "Falcon Privileged Access",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-046",
+      "description": "Vet and approve third-party agents, plugins, and tools before allowlisting them in the agentic pipeline",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-047",
+      "description": "Maintain a signed software bill of materials (SBOM) for all agentic components including dynamically discovered ones",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-048",
+      "description": "Require cryptographic signatures from trusted registries before any component is integrated at runtime",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-049",
+      "description": "Monitor runtime component composition for unexpected additions or changes to the agent toolset",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-050",
+      "description": "Apply dependency pinning and integrity hashing to prevent silent substitution of components",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-051",
+      "description": "Perform periodic supply chain risk assessments and include agentic AI components in third-party risk programmes",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        },
+        {
+          "product": "Falcon Shield",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-052",
+      "description": "Rigorously vet and validate all data sources before ingestion into memory or embedding stores",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-053",
+      "description": "Implement data integrity checks (cryptographic hashing or signatures) on stored memory entries",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-054",
+      "description": "Maintain clear data lineage so the origin and modification history of each memory artefact is auditable",
+      "falcon_modules": [
+        {
+          "product": "Falcon Data Security",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-055",
+      "description": "Apply access controls restricting which agents and processes can write to long-term memory stores",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-056",
+      "description": "Conduct periodic memory sanitisation to detect and remove anomalous or adversarially crafted entries",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-057",
+      "description": "Alert on statistically unexpected writes or sudden shifts in stored context distributions",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-058",
+      "description": "Implement circuit breakers to automatically halt inter-agent propagation when error rates or task fan-out exceed defined thresholds",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-059",
+      "description": "Apply end-to-end encrypted channels with mutual authentication between agents to prevent forged messages from triggering downstream agents",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-060",
+      "description": "Use digital signatures and message hashing to protect inter-agent message integrity",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-061",
+      "description": "Apply anti-replay controls using nonces and timestamps to prevent retransmitted faulty messages from re-triggering workflows",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-062",
+      "description": "Maintain verified, attested agent registries with signed descriptors to prevent rogue agent injection",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-063",
+      "description": "Design agentic workflows with blast-radius containment — isolate tenants, domains, and task namespaces to limit cross-contamination",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-064",
+      "description": "Deploy continuous behavioural monitoring to detect goal drift, unexpected tool usage, or output anomalies in running agents",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-065",
+      "description": "Run each agent in an isolated containerised sandbox with strict network and filesystem controls to limit scope of compromise",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-066",
+      "description": "Require human oversight and approval gates for agents operating with elevated autonomy or accessing sensitive resources",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-067",
+      "description": "Implement agent attestation — cryptographically verify agent identity and integrity before it is admitted to a workflow",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-068",
+      "description": "Replay recorded agent action logs in isolated clone environments periodically to test for hidden harmful behaviours",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-069",
+      "description": "Apply anomaly detection on agent output streams to identify deviations from the agent's declared purpose",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-070",
+      "description": "Limit the public release of technical information about the ML stack including model architecture, training datasets, and framework versions (ATLAS AML.M0000)",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-071",
+      "description": "Restrict organisational disclosures such as researcher names, department structures, and deployment details from which model characteristics may be inferred",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-072",
+      "description": "Implement behavioural analytics and rate limiting on public-facing APIs and documentation portals to identify and throttle systematic reconnaissance patterns",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-073",
+      "description": "Apply access controls to model cards, internal wikis, and technical reports to limit exposure of operational ML details",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-074",
+      "description": "Monitor public repositories and forums for inadvertent disclosure of proprietary ML artefacts",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-075",
+      "description": "Use trusted, auditable training pipelines with data provenance tracking to detect unauthorised modifications to training data or fine-tuning datasets",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-076",
+      "description": "Validate model performance on out-of-distribution and adversarially crafted inputs specifically designed to probe for backdoor triggers",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-077",
+      "description": "Monitor deployed models for concept drift and training data drift, which may indicate data tampering or poisoning upstream",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Alternate Control"
+        },
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-078",
+      "description": "Apply model scanning tools (e.g., backdoor detection via neural cleanse or activation clustering) before promoting models to production",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-079",
+      "description": "Enforce integrity verification on model artefacts at each stage of the ML pipeline — training, evaluation, packaging, and deployment",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-080",
+      "description": "Require strong authentication on all inference API endpoints — use short-lived tokens rather than persistent API keys where possible",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-081",
+      "description": "Apply rate limiting and query throttling per account and IP to impede systematic model extraction attempts",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-082",
+      "description": "Monitor API query patterns for characteristics of model extraction (high volume, diverse inputs, structured probing) and alert or block on detection",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-083",
+      "description": "Restrict inference API access to authorised clients via IP allowlisting or mTLS where the client population is known",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-084",
+      "description": "Implement query logging with sufficient detail to support forensic reconstruction of extraction campaigns",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Alternate Control"
+        },
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-085",
+      "description": "Apply adversarial training by augmenting the training dataset with adversarial examples to improve model robustness",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-086",
+      "description": "Use network distillation to produce smoother decision boundaries less susceptible to adversarial perturbations",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-087",
+      "description": "Implement input pre-processing defences including feature squeezing, randomised smoothing, and input normalisation before inference",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-088",
+      "description": "Conduct regular adversarial robustness evaluations using benchmark attack suites (FGSM, PGD, C&W) as part of the model evaluation lifecycle",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-089",
+      "description": "Apply ensemble methods — aggregating predictions from multiple models reduces the reliability of single-model adversarial examples",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-090",
+      "description": "Implement and enforce usage policies and terms of service with automated detection of policy violations",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-091",
+      "description": "Apply rate limiting, CAPTCHA challenges, and account verification to impede automated bulk abuse",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-092",
+      "description": "Monitor generated outputs for anomalous content patterns indicative of fraud, disinformation, or policy violations",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Alternate Control"
+        },
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-093",
+      "description": "Use content classifiers and output safety filters tuned to the product's abuse risk profile",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-094",
+      "description": "Implement account-level abuse scoring and graduated response (throttling, suspension) for accounts exhibiting suspicious usage patterns",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-095",
+      "description": "Enforce a clear privilege hierarchy in the system prompt that explicitly instructs the model to ignore user-supplied override attempts",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-096",
+      "description": "Apply semantic input filtering and intent classification to detect and block known injection patterns before model inference",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-097",
+      "description": "Implement strict output validation to detect and suppress model responses that indicate a successful injection",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-098",
+      "description": "Conduct regular red-team exercises simulating direct injection attacks including role-play, delimiter injection, and jailbreak variants",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-099",
+      "description": "Use fine-tuned or RLHF-trained models with explicit resistance to direct override instructions",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-100",
+      "description": "Sanitise and validate all externally retrieved content before inclusion in the model context — strip or escape instruction-like patterns",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-101",
+      "description": "Treat all retrieved documents, tool outputs, and web content as untrusted data, never as instructions",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-102",
+      "description": "Implement content provenance tracking so the origin of every context fragment is known and auditable",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-103",
+      "description": "Sandbox agentic workflow execution to prevent injected instructions from reaching privileged tool invocations",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-104",
+      "description": "Apply content-aware filtering tuned specifically to detect hidden instructions in retrieved content (markup, invisible text, encoded payloads)",
+      "falcon_modules": [
+        {
+          "product": "Falcon AIDR",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-105",
+      "description": "Research confirms that RAG and fine-tuning alone do not fully mitigate indirect injection — layer additional controls accordingly",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-106",
+      "description": "Document the organisation's mission, critical business objectives, and key dependencies in a cybersecurity context statement reviewed at least annually",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-107",
+      "description": "Identify and catalogue applicable legal, regulatory, and contractual cybersecurity obligations and map them to internal controls",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-108",
+      "description": "Engage senior leadership and key stakeholders to surface and record cybersecurity risk expectations and constraints",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-109",
+      "description": "Conduct periodic reviews of organisational context to capture changes in mission, operating environment, or regulatory requirements",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-110",
+      "description": "Establish cybersecurity KPIs and KRIs reported to senior leadership on a defined cadence (monthly/quarterly)",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-111",
+      "description": "Conduct periodic board-level or executive cybersecurity programme reviews against stated strategy and risk appetite",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-112",
+      "description": "Feed results of audits, assessments, and incident post-mortems into strategy adjustment cycles",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-113",
+      "description": "Define escalation thresholds that trigger formal leadership review when risk exposure exceeds agreed tolerance",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-114",
+      "description": "Define and document explicit risk tolerance and appetite statements endorsed by executive leadership",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-115",
+      "description": "Establish risk prioritisation criteria aligned to business impact, likelihood, and regulatory requirements",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-116",
+      "description": "Communicate risk strategy across business units and embed it in departmental planning processes",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-117",
+      "description": "Review and update the risk management strategy at least annually or following material changes to the threat landscape or business environment",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-118",
+      "description": "Define a cybersecurity RACI matrix covering all key risk management, response, and oversight activities",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-119",
+      "description": "Establish formal accountability mechanisms (performance objectives, audit findings) linked to cybersecurity responsibilities",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-120",
+      "description": "Communicate role assignments and authority levels to all affected personnel through onboarding and periodic refresh",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-121",
+      "description": "Review and update role definitions following organisational restructuring, system changes, or significant incidents",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-122",
+      "description": "Include cybersecurity requirements and right-to-audit clauses in all supplier and partner contracts",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-123",
+      "description": "Conduct risk-tiered supplier assessments before onboarding and on a defined periodic basis",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-124",
+      "description": "Maintain an approved supplier register and monitor for changes in supplier security posture",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-125",
+      "description": "Establish incident notification requirements for suppliers and define escalation paths for supply chain security events",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-126",
+      "description": "Maintain a comprehensive, up-to-date asset inventory covering hardware, software, data, services, and personnel with ownership and criticality classification",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-127",
+      "description": "Perform regular automated discovery scans to detect unmanaged or shadow assets",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-128",
+      "description": "Classify assets by criticality and sensitivity to inform prioritised protection and monitoring decisions",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-129",
+      "description": "Integrate asset inventory with vulnerability management and configuration management processes for consistent lifecycle coverage",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-130",
+      "description": "Conduct structured post-incident and post-exercise reviews (lessons-learned sessions) with documented action items and owners",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-131",
+      "description": "Integrate improvement actions into planning cycles with tracked completion timelines and accountability",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-132",
+      "description": "Perform periodic cybersecurity capability maturity assessments (e.g., against CSF tiers) to identify systematic gaps",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-133",
+      "description": "Establish a continuous improvement register that captures findings from assessments, audits, red-team exercises, and threat intelligence",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-134",
+      "description": "Conduct structured threat modelling and vulnerability assessments on a risk-tiered schedule for all critical systems",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-135",
+      "description": "Integrate current threat intelligence feeds to inform likelihood and impact ratings in risk assessments",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-136",
+      "description": "Prioritise risks by combined likelihood and business impact and communicate prioritised risk registers to decision-makers",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-137",
+      "description": "Review and update risk assessments following significant changes to the environment, threat landscape, or asset inventory",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-138",
+      "description": "Implement phishing-resistant multi-factor authentication (FIDO2 passkeys, certificate-based authentication) for all users, especially privileged accounts",
+      "falcon_modules": [
+        {
+          "product": "Falcon Identity Threat Protection",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-139",
+      "description": "Enforce least-privilege access and separation of duties through RBAC or ABAC policies reviewed on a defined cycle",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-140",
+      "description": "Manage the full identity lifecycle — provisioning, access reviews, and timely de-provisioning — for all human and non-human identities",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Alternate Control"
+        },
+        {
+          "product": "Falcon Identity Threat Protection",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-141",
+      "description": "Adopt industry-standard protocols (SAML 2.0, OAuth 2.0, OpenID Connect) and encrypt identity assertion channels (TLS 1.2+)",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-142",
+      "description": "Log and monitor authentication events for anomalies (failed attempts, unusual hours, new locations) and integrate with SIEM",
+      "falcon_modules": [
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-143",
+      "description": "Implement network segmentation and micro-segmentation to contain the blast radius of breaches",
+      "falcon_modules": [
+        {
+          "product": "Continuous Authorization (SGNL)",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-144",
+      "description": "Deploy redundant system components and failover mechanisms for critical services to maintain availability",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-145",
+      "description": "Enforce regular backup schedules with off-site or air-gapped copies and test restoration procedures periodically",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-146",
+      "description": "Conduct architecture reviews against security design principles (zero trust, defence in depth) on a defined cadence",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-147",
+      "description": "Maintain and exercise resilience playbooks covering scenarios for system failure, ransomware, and DDoS",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-148",
+      "description": "Define and enforce hardening baselines for all platform types (OS, containers, cloud services) and validate compliance continuously",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-149",
+      "description": "Implement a risk-tiered patch management programme with defined SLAs for critical vulnerabilities",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-150",
+      "description": "Apply configuration management tooling (IaC, CSPM) to detect and remediate configuration drift",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-151",
+      "description": "Embed security requirements in the secure software development lifecycle (SSDLC) including code review, SAST, DAST, and dependency scanning",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-152",
+      "description": "Deploy SIEM with correlation rules to aggregate and analyse events from heterogeneous sources and surface high-fidelity alerts",
+      "falcon_modules": [
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-153",
+      "description": "Define incident categorisation thresholds that trigger automated escalation to triage and response teams",
+      "falcon_modules": [
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-154",
+      "description": "Integrate threat intelligence IOCs into detection rules to improve event contextualisation",
+      "falcon_modules": [
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-155",
+      "description": "Conduct regular tuning of detection logic to reduce false positives and sharpen signal-to-noise ratio",
+      "falcon_modules": [
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-156",
+      "description": "Implement automated triage playbooks for common event patterns to accelerate analyst response",
+      "falcon_modules": [
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-157",
+      "description": "Deploy network traffic analysis (NTA) and intrusion detection systems (IDS/IPS) across perimeter and internal network segments",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-158",
+      "description": "Collect endpoint telemetry via EDR agents to enable host-level behavioural detection",
+      "falcon_modules": [
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-159",
+      "description": "Centralise log collection from all asset types into a SIEM with sufficient retention for forensic investigation",
+      "falcon_modules": [
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-160",
+      "description": "Implement UEBA to baseline normal behaviour and detect anomalous identity and data access patterns",
+      "falcon_modules": [
+        {
+          "product": "Falcon Next-Gen SIEM",
+          "implementation": "Alternate Control"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-161",
+      "description": "Run continuous vulnerability scans against the asset inventory and prioritise remediation based on exploitability and criticality",
+      "falcon_modules": [
+        {
+          "product": "Falcon Exposure Management",
+          "implementation": "Effective"
+        }
+      ]
+    },
+    {
+      "mitigation_id": "MIT-162",
+      "description": "Develop and maintain an incident communication plan covering internal escalation paths and external notification obligations",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-163",
+      "description": "Define breach notification timelines and responsibilities aligned to applicable regulatory requirements (e.g., GDPR 72-hour rule)",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-164",
+      "description": "Establish pre-approved communication templates for common incident scenarios to reduce response latency",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-165",
+      "description": "Participate in relevant ISAC or sector threat-sharing communities to enable voluntary intelligence sharing during incidents",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-166",
+      "description": "Test communication procedures through tabletop exercises that simulate regulatory notification and executive briefing scenarios",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-167",
+      "description": "Maintain a documented incident response plan with defined roles, escalation thresholds, and playbooks for common incident types",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-168",
+      "description": "Conduct at least annual incident response exercises (tabletop and live-fire) to validate plan effectiveness and team readiness",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-169",
+      "description": "Define and enforce evidence preservation procedures from the first moment of incident detection to support forensic investigation",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-170",
+      "description": "Establish containment decision criteria for isolating affected systems without unnecessarily disrupting operations",
+      "falcon_modules": []
+    },
+    {
+      "mitigation_id": "MIT-171",
+      "description": "Define clear handoff criteria and procedures between the response and recovery phases to ensure continuity",
+      "falcon_modules": []
+    }
+  ]
+}
