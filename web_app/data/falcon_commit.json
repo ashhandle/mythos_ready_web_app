@@ -1,5 +1,5 @@
 {
-  "generatedDate": "2026-05-02",
+  "generatedDate": "2026-05-03",
   "data": {
     "ENDPOINT SECURITY": [
       {
@@ -12,11 +12,11 @@
       },
       {
         "product": "Falcon for Mobile",
-        "selected": true
+        "selected": false
       },
       {
         "product": "Falcon Insight for ChromeOS",
-        "selected": true
+        "selected": false
       },
       {
         "product": "Falcon Insight for IoT",
@@ -80,7 +80,7 @@
     "NEXT-GEN SIEM": [
       {
         "product": "Falcon Next-Gen SIEM",
-        "selected": true
+        "selected": false
       },
       {
         "product": "Falcon Search Retention",
@@ -136,7 +136,7 @@
     "AIDR": [
       {
         "product": "Falcon AIDR",
-        "selected": false
+        "selected": true
       }
     ],
     "CHARLOTTE AI": [
