@@ -23,6 +23,7 @@ const FALCON_SELECTION_KEY = 'frontierai_falcon_selection';
 const App = {
   data: null,
   falconData: null,
+  mitigationsData: null,
   mitMap: {},
   fwCodeCounts: {},
 
@@ -192,12 +193,14 @@ const App = {
 
   async init() {
     try {
-      const [fwRes, falconRes] = await Promise.all([
+      const [fwRes, falconRes, mitRes] = await Promise.all([
         fetch('data/mythos_framework_codes.json'),
         fetch('data/falcon_products.json'),
+        fetch('data/frontier_ai_mitigations.json'),
       ]);
-      this.data       = await fwRes.json();
-      this.falconData = await falconRes.json();
+      this.data           = await fwRes.json();
+      this.falconData     = await falconRes.json();
+      this.mitigationsData = await mitRes.json();
       this.buildIndices();
       this.setupGlobalSearch();
       const vEl = document.getElementById('nav-version');
@@ -550,7 +553,67 @@ const App = {
         heading.appendChild(nb);
       }
     }
+    this.applyFalconSelections();
     this.saveFalconCommit();
+  },
+
+  // ── Falcon → Mitigation control sync ─────────────────────────────────────
+  // Precedence: Effective > Alternate Control > Not Effective
+  // Justification: newline-separated list of selected product names.
+  // A control is considered falcon-managed when any product name from that
+  // mitigation's falcon_modules appears in the stored justification text.
+  // On deselect, if no products remain for a mitigation it reverts to
+  // Not Assessed with cleared justification.
+
+  applyFalconSelections() {
+    if (!this.mitigationsData) return;
+
+    const PRECEDENCE = ['Effective', 'Alternate Control', 'Not Effective'];
+    const sel      = this.getFalconSelections();
+    const controls = this.getMitControls();
+
+    this.mitigationsData.mitigations.forEach(mit => {
+      const modules = mit.falcon_modules;
+      if (!modules || modules.length === 0) return;
+
+      const selected = modules.filter(fm => sel[fm.product] === true);
+      const existing = controls[mit.mitigation_id];
+      const isFalconManaged = existing &&
+        modules.some(fm => (existing.justification || '').includes(fm.product));
+
+      if (selected.length === 0) {
+        if (isFalconManaged) {
+          controls[mit.mitigation_id] = { implementation: 'Not Assessed', justification: '' };
+        }
+        return;
+      }
+
+      // Highest-precedence implementation across all selected products
+      let bestImpl = selected.map(fm => fm.implementation)
+        .sort((a, b) => {
+          const ai = PRECEDENCE.indexOf(a);
+          const bi = PRECEDENCE.indexOf(b);
+          const ar = ai === -1 ? Infinity : ai;
+          const br = bi === -1 ? Infinity : bi;
+          return ar - br;
+        })[0];
+
+      if (!PRECEDENCE.includes(bestImpl)) bestImpl = 'Not Effective';
+
+      controls[mit.mitigation_id] = {
+        implementation: bestImpl,
+        justification:  selected.map(fm => fm.product).join('\n'),
+      };
+    });
+
+    localStorage.setItem(MIT_CONTROLS_KEY, JSON.stringify(controls));
+    this.refreshAllRiskBadges();
+  },
+
+  refreshAllRiskBadges() {
+    if (!this.data) return;
+    this.data.codes.forEach(c => this.refreshCodeRowBadge(c.code));
+    this.refreshModalRisk();
   },
 
   saveFalconCommit() {
