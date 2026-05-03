@@ -51,8 +51,8 @@ const App = {
 
     if (active.length === 0) {
       return {
-        level: 'Not Assessed',
-        basis: 'No mitigations assessed — set Control Implementation values below to calculate risk.',
+        level: 'Critical',
+        basis: 'No mitigations assessed — unassessed controls are treated as Critical risk.',
       };
     }
 
@@ -87,6 +87,24 @@ const App = {
     const counts = { 'Critical': 0, 'High': 0, 'Medium': 0, 'Not Assessed': 0 };
     this.data.codes.forEach(c => { counts[this.getCodeRiskLevel(c.code)]++; });
     return counts;
+  },
+
+  getNotAssessedMitigationCount() {
+    const controls = this.getMitControls();
+    return this.data.mitigations.filter(m => {
+      const impl = controls[m.mitigation_id]?.implementation || 'Not Assessed';
+      return impl === 'Not Assessed';
+    }).length;
+  },
+
+  getNotAssessedCodeCount() {
+    const controls = this.getMitControls();
+    return this.data.codes.filter(c =>
+      c.mitigations.every(id => {
+        const impl = controls[id]?.implementation || 'Not Assessed';
+        return impl === 'Not Assessed';
+      })
+    ).length;
   },
 
   // ── Mitigation control persistence ───────────────────────────────────────
@@ -300,9 +318,11 @@ const App = {
     const total = this.data.codes.length;
     const assessed = total - counts['Not Assessed'];
     const pct = Math.round((assessed / total) * 100);
+    const notAssessedMits  = this.getNotAssessedMitigationCount();
+    const notAssessedCodes = this.getNotAssessedCodeCount();
 
-    const cards = RISK_LEVELS.map(level => {
-      const meta = RISK_META[level];
+    const cards = RISK_LEVELS.filter(l => l !== 'Not Assessed').map(level => {
+      const meta  = RISK_META[level];
       const count = counts[level];
       return `
         <a class="risk-panel-card ${meta.cls}" href="#/risk/${encodeURIComponent(level)}">
@@ -332,6 +352,7 @@ const App = {
               <div class="risk-progress-fill" style="width:${pct}%"></div>
             </div>
             <span class="risk-progress-label">${assessed} / ${total} assessed</span>
+            <span class="risk-card-mit-count">${notAssessedCodes} ${notAssessedCodes === 1 ? 'code' : 'codes'} unassessed &nbsp;&middot;&nbsp; ${notAssessedMits} ${notAssessedMits === 1 ? 'mitigation' : 'mitigations'} unassessed</span>
           </div>
         </div>
         <div class="risk-panel-cards">${cards}</div>
@@ -436,15 +457,26 @@ const App = {
     const downloadBtn = totalSelected > 0
       ? `<button class="falcon-download-btn" onclick="App.downloadFalconSelection()">&#x2B07; Download Selection (${totalSelected})</button>`
       : '';
+    const resetBtn = totalSelected > 0
+      ? `<button class="falcon-reset-btn" onclick="App.resetFalconSelections()">&#x2715; Reset Selections</button>`
+      : '';
     return `
       <div class="section-heading" style="margin-top:40px">
         <h2>Falcon Platform Modules</h2>
         <span class="count">${domains.length} domains &nbsp;&middot;&nbsp; ${totalProducts} products</span>
         ${downloadBtn}
+        ${resetBtn}
       </div>
       <div class="falcon-grid">
         ${domains.map(([domain, products]) => this.renderFalconCard(domain, products)).join('')}
       </div>`;
+  },
+
+  resetFalconSelections() {
+    if (!confirm('Reset all Falcon product selections? This will also revert any falcon-managed mitigation controls.')) return;
+    localStorage.removeItem(FALCON_SELECTION_KEY);
+    this.applyFalconSelections();
+    this.route();
   },
 
   renderFalconCard(domain, products) {

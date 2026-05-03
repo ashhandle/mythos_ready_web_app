@@ -529,6 +529,21 @@ main { flex: 1; }
 }
 .falcon-download-btn:hover { background: var(--accent); color: #fff; }
 
+.falcon-reset-btn {
+  margin-left: 8px;
+  padding: 5px 14px;
+  border-radius: 4px;
+  border: 1px solid var(--text-muted);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+  white-space: nowrap;
+}
+.falcon-reset-btn:hover { border-color: #f97316; color: #f97316; }
+
 /* ── Falcon product selection modal ── */
 .falcon-modal-title {
   font-size: 1.1rem;
@@ -1272,6 +1287,12 @@ main { flex: 1; }
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.risk-card-mit-count {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
 }
 
 .risk-card-arrow {
