@@ -80,7 +80,7 @@
     "NEXT-GEN SIEM": [
       {
         "product": "Falcon Next-Gen SIEM",
-        "selected": false
+        "selected": true
       },
       {
         "product": "Falcon Search Retention",
@@ -98,7 +98,7 @@
     "DATA SECURITY": [
       {
         "product": "Falcon Data Security",
-        "selected": false
+        "selected": true
       }
     ],
     "EXPOSURE MANAGEMENT": [
